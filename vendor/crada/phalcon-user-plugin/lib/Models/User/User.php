@@ -2,7 +2,8 @@
 
 namespace Phalcon\UserPlugin\Models\User;
 
-use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Uniqueness;
 
 class User extends \Phalcon\Mvc\Model
 {
@@ -866,14 +867,18 @@ class User extends \Phalcon\Mvc\Model
      */
     public function validation()
     {
-        $this->validate(new Uniqueness(
+		$validator = new Validation();
+		$validator->add('email', new Uniqueness([
+            "message" => "The email is already registered"
+        ]));
+        /*$this->validate(new Uniqueness(
             array(
                 'field' => 'email',
                 'message' => 'The email is already registered',
             )
-        ));
-
-        return true !== $this->validationHasFailed();
+        ));*/
+		return $this->validate($validator);
+        //return true !== $this->validationHasFailed();
     }
 
     /**
@@ -973,9 +978,9 @@ class User extends \Phalcon\Mvc\Model
         $emailConfirmation->setUserId($this->id);
 
         if ($emailConfirmation->save()) {
-            $this->getDI()->getFlashSession()->notice(
-                'A confirmation mail has been sent to '.$this->email
-            );
+            //$this->getDI()->getFlashSession()->notice(
+              //  'A confirmation mail has been sent to '.$this->email
+            //);
         }
     }
 }

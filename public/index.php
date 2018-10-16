@@ -6,6 +6,7 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\UserPlugin\Auth\Auth;
 use Phalcon\UserPlugin\Acl\Acl;
 use Phalcon\UserPlugin\Mail\Mail;
+use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 
 error_reporting(E_ALL);
 
@@ -84,6 +85,20 @@ try {
 		}
 	);
 	
+	// Setup the database service
+	$di->set(
+		'db',
+		function () {
+			return new DbAdapter(
+				[
+					'host'     => '127.0.0.1',
+					'username' => 'root',
+					'password' => '',
+					'dbname'   => 'pacman',
+				]
+			);
+		}
+	);
 	
     echo str_replace(["\n","\r","\t"], '', $application->handle()->getContent());
 

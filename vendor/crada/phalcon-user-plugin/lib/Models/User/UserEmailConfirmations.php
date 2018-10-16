@@ -206,7 +206,7 @@ class UserEmailConfirmations extends \Phalcon\Mvc\Model
     {
         $this->created_at = date('Y-m-d H:i:s');
         $this->code = preg_replace('/[^a-zA-Z0-9]/', '', base64_encode(openssl_random_pseudo_bytes(24)));
-        $this->confirmed = 0;
+        $this->confirmed = 1;
     }
 
     /**
@@ -222,7 +222,7 @@ class UserEmailConfirmations extends \Phalcon\Mvc\Model
      */
     public function afterCreate()
     {
-        $this->getDI()->getMail()->send(
+        /*$this->getDI()->getMail()->send(
             array(
                 $this->user->getEmail() => $this->user->getName(),
             ),
@@ -231,7 +231,7 @@ class UserEmailConfirmations extends \Phalcon\Mvc\Model
             array(
                 'confirmUrl' => '/user/confirmEmail/'.$this->getCode().'/'.$this->user->getEmail(),
             )
-        );
+        );*/
     }
 
     public function initialize()

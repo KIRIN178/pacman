@@ -30,12 +30,20 @@ return new \Phalcon\Config([
         // possibly if the web server rewrite rules are changed. This can also be set to a static path.
         'baseUri'        => preg_replace('/public([\/\\\\])index.php$/', '', $_SERVER["PHP_SELF"]),
     ],
+	'database' => [
+        'adapter'     => 'Mysql',
+        'host'        => 'localhost',
+        'username'    => 'root',
+        'password'    => '',
+        'dbname'      => 'pacman',
+        'charset'     => 'utf8',
+    ],
 	/**
 	 * PhalconUserPlugin
 	 */
 	'pup' => [
 		'redirect' => [
-			'success' => 'user/profile',
+			'success' => 'play/go',
 			'failure' => 'user/login'    
 		],
 		'resources' => [
@@ -47,5 +55,40 @@ return new \Phalcon\Config([
 				]
 			]
 		]
-	]
+	],
+	'connectors' => [
+        'facebook' => [
+            'appId' => 'YOUR_FACEBOOK_APP_ID',
+            'secret' => 'YOUR_FACEBOOK_APP_SECRET'
+        ],
+        'linkedIn' => [
+            'api_key' => 'YOUR_LINKED_IN_APP_ID',
+            'api_secret' => 'YOUR_LINKED_IN_APP_SECRET',
+            'callback_url' => 'CALLBACK_URL'
+        ],
+        'twitter' => [
+            'consumer_key' => 'TWITTER_CONSUMER_KEY',
+            'consumer_secret' => 'TWITTER_CONSUMER_SECRET',
+            // Leave empty if you don't want to set it
+            'user_agent' => 'YOUR_APPLICATION_NAME'
+        ],
+        'google' => [
+            'application_name' => 'YOUR_APPLICATION_NAME',
+            'client_id' => 'YOUR_CLIENT_ID',
+            'client_secret' => 'YOUR_CLIENT_SECRET',
+            'developer_key' => 'YOUR_DEVELOPER_KEY',
+            'redirect_uri' => 'YOUR_REDIRECT_URI'
+        ]
+    ],
+	    'mail' => [
+        'fromName' => 'Pacman Admin',
+        'fromEmail' => 'kirin178.hsu@gmail.com',
+        'smtp' => [
+            'server' => 'smtp.gmail.com',
+            'port' => 465,
+            'security' => 'tls', // Usually for gmail accounts
+            'username' => 'kirin178.hsu',
+            'password' => 'china2424',
+        ]
+    ]
 ]);

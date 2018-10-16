@@ -32,11 +32,13 @@ class Auth extends Component
         $user = User::findFirstByEmail(strtolower($credentials['email']));
         if ($user == false) {
             $this->registerUserThrottling(null);
+			$this->flashSession->error("Wrong email/password combination");
             throw new Exception('Wrong email/password combination');
         }
 
         if (!$this->security->checkHash($credentials['password'], $user->getPassword())) {
             $this->registerUserThrottling($user->getId());
+			$this->flashSession->error("Wrong email/password combination");
             throw new Exception('Wrong email/password combination');
         }
 
@@ -570,7 +572,7 @@ class Auth extends Component
      */
     public function checkUserFlags($user)
     {
-        if ($user->getStatus() === User::STATUS_INACTIVE) {
+        /*if ($user->getStatus() === User::STATUS_INACTIVE) {
             throw new Exception('The user is inactive');
         }
 
@@ -580,7 +582,7 @@ class Auth extends Component
 
         if ($user->getStatus() === User::STATUS_SUSPENDED) {
             throw new Exception('The user is suspended');
-        }
+        }*/
     }
 
     /**
