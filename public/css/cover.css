@@ -1,12 +1,164 @@
 .btn {
 	min-width: 100px;
 }
+.game-panel {
+	width: 620px;
+	height: 380px;
+	font-size: 0;
+	text-align: center;
+}
+.game-panel .pacman {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	z-index: 100;
+}
+.game-panel h1 {
+	margin-top: 50%;
+}
+.score-panel {
+	margin-top: 26px;
+	margin-left: 66%;
+}
+main.text-center h2 {
+	margin-top: -120px;
+	margin-bottom: 26px;
+}
+.game-panel button {
+	margin-top: 72px;
+}
+/* .g0: road
+   .g1: road with a dot
+   .g2: road with a power pellet
+   .g3: road with a grave
+   .g3-5~.g3-1: ghost countdown
+   .g4: rock
+*/
+.g0 {
+	width: 20px;
+	height: 20px;
+	background-color: #aaa;
+	display: inline-block;
+}
+.g1 {
+	width: 20px;
+	height: 20px;
+	background-color: #aaa;
+	display: inline-block;
+}
+.g1:before {
+	content: ' \25CF';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: yellow;
+	margin-top: 0px;
+	margin-left: -11px;
+	font-size: 11px;
+}
+.g2 {
+	width: 20px;
+	height: 20px;
+	background-color: #aaa;
+	display: inline-block;
+}
+.g2:before {
+	content: ' \25CF';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: yellow;
+	margin-top: -12px;
+	margin-left: -11px;
+	font-size: 23px;
+}
+.g3, .g3-5, .g3-4, .g3-3, .g3-2, .g3-1 {
+	width: 20px;
+	height: 20px;
+	background-color: #aaa;
+	display: inline-block;
+}
+.g3:before {
+	content: ' \03a6';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: black;
+	margin-top: 0px;
+	margin-left: -11px;
+	font-size: 11px;
+}
+.g3-5:before {
+	content: '⑤';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: black;
+	margin-top: -7px;
+	margin-left: -11px;
+	font-size: 18px;
+}
+.g3-4:before {
+	content: '④';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: black;
+	margin-top: -7px;
+	margin-left: -11px;
+	font-size: 18px;
+}
+.g3-3:before {
+	content: '③';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: black;
+	margin-top: -7px;
+	margin-left: -11px;
+	font-size: 18px;
+}
+.g3-2:before {
+	content: '②';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: black;
+	margin-top: -7px;
+	margin-left: -11px;
+	font-size: 18px;
+}
+.g3-1:before {
+	content: '➀';
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	color: black;
+	margin-top: -7px;
+	margin-left: -11px;
+	font-size: 18px;
+}
+.g4 {
+	width: 20px;
+	height: 20px;
+	background-color: #333;
+	border: 1px solid #000;
+	display: inline-block;
+}
 .hidden {
 	display: none !important;
 }
-.input-group-text{
+.input-group-text {
 	min-width: 96px;
 	text-align: center;
+}
+.nav-user {
+	padding: .25rem 0;
+	font-weight: 700;
+	color: rgba(255, 255, 255, .5);
+	background-color: transparent;
+	border-bottom: .25rem solid transparent;
+	margin-left: 1rem;
 }
 /*
  * Globals

@@ -25,6 +25,7 @@ class UserController extends \Phalcon\Mvc\Controller
 		// And some local JavaScript resources
         $this->assets->addJs('//code.jquery.com/jquery-3.3.1.slim.min.js', false);
         $this->assets->addJs('js/bootstrap.min.js');
+		$this->view->nav = 'user';
 	}
     public function indexAction()
     {
@@ -51,14 +52,7 @@ class UserController extends \Phalcon\Mvc\Controller
 
         $this->view->form = $form;
 		if(true === $this->auth->isUserSignedIn())
-        {
-            $this->dispatcher->forward(
-				[
-					'controller' => 'play',
-					'action'     => 'go',
-				]
-			);
-        }
+        	$this->response->redirect('play');
 		else
 		{
 			if($this->request->isPost())
@@ -133,7 +127,7 @@ class UserController extends \Phalcon\Mvc\Controller
     public function signoutAction()
     {
         $this->auth->remove();
-        return $this->response->redirect('/', true);
+        return $this->response->redirect('/rank', true);
     }
 
     /**
@@ -171,13 +165,7 @@ class UserController extends \Phalcon\Mvc\Controller
                     //$this->view->disable();
                     //return $this->response->redirect($this->_activeLanguage.'/user/register');
 					$this->auth->login($form);
-					$this->dispatcher->forward(
-						[
-							'controller' => 'play',
-							'action'     => 'go',
-						]
-					);
-					
+					$this->response->redirect('play');
                 }
             }
         }

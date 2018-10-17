@@ -59,10 +59,11 @@ class Auth extends Component
      */
     private function setIdentity($user)
     {
+		$arr_name = explode('@',$user->getEmail());
         $st_identity = array(
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'name' => $user->getName(),
+            'name' => $arr_name[0],
         );
 
         if ($user->profile) {

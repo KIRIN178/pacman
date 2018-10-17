@@ -245,7 +245,7 @@ class UserMigration_100 extends Migration
                     new Index('name', ['name'], null),
                     new Index('status', ['status'], null)
                 ],
-                'references' => [
+                /*'references' => [
                     new Reference(
                         'user_ibfk_1',
                         [
@@ -257,7 +257,7 @@ class UserMigration_100 extends Migration
                             'onDelete' => 'CASCADE'
                         ]
                     )
-                ],
+                ],*/
                 'options' => [
                     'TABLE_TYPE' => 'BASE TABLE',
                     'AUTO_INCREMENT' => '17',
