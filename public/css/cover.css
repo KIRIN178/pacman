@@ -1,3 +1,11 @@
+.blink_me {
+  animation: blinker 0.3s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 .btn {
 	min-width: 100px;
 }
@@ -21,11 +29,15 @@
 .game-panel h1 {
 	margin-top: 50%;
 }
+#pleaseWaitDialog {
+	color: #666;
+	margin-top: 360px;
+}
 .score-panel {
 	margin-top: 26px;
 	margin-left: 66%;
 }
-main.text-center h2 {
+main.text-center .score-panel h2 {
 	margin-top: -120px;
 	margin-bottom: 26px;
 }
@@ -270,4 +282,56 @@ body {
  */
 .mastfoot {
   color: rgba(255, 255, 255, .5);
+}
+
+table {
+        width: 100%;
+    }
+
+thead, tbody, tr, td, th { display: block; }
+
+tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+thead th {
+
+    /*text-align: left;*/
+}
+
+tbody {
+    max-height: 860px;
+    overflow-y: auto;
+}
+
+thead {
+    /* fallback */
+}
+
+td.rank, th.rank {
+	width: 77px;
+	text-align: center;
+}
+td.name, th.name {
+	width: 130px;
+	text-align: left;
+}
+td.score, th.score {
+	width: 109px;
+	text-align: center;
+}
+td.level, th.level {
+	width: 77px;
+	text-align: center;
+}
+td.last, th.last {
+	width: 180px;
+	text-align: center;
+}
+tbody td, thead th {
+    
+    float: left;
 }

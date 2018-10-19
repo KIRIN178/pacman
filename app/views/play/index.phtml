@@ -2,14 +2,33 @@
   <?php $this->partial('nav'); ?>
 
   <main role="main" class="inner cover text-center">
-	<h2 style="display:none;">Level <span class="level"></span></h2>
-	<div class="game-panel">
+	<h2 class="level-panel" style="display:none;">Level <span class="level"></span></h2>
+	<div class="game-panel" >
 		<h1>△Pac-man△</h1>
 		<button class="btn btn-danger btn-play">Play</button>
 	</div>
 	<div class="score-panel text-left" style="display:none;">
-		<h3>LIFE: <span class="life">3</span></h3>
+		<h3>LIFE: <span class="life"><?=$extra_life>3?3:$extra_life ?></span> / 3</h3>
 		<h3>SCORE: <span class="score">0</span></h3>
+	</div>
+	<div class="loading" style="display:none">
+	  <h1 class="text-center">Loading</h1>
+	  <div class="progress">
+		<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+	  </div>
+    </div>
+	<div class="result-panel" style="display:none;">
+	    <h1>Game Over</h1>
+		<br>
+		<h3>Last Level: <span class="last-level"></span></h3>
+		<h3>Last Score: <span class="last-score"></span></h3>
+		<br>
+		<h3>Highest Level: <span class="highest-level"></span></h3>
+		<h3>Total Score: <span class="total-score"></span></h3>
+		<br>
+		<h3>Score of Your Team: <span class="team-score"></span></h3>
+		<br>
+		<a href="/play">≫Play again</a>
 	</div>
   </main>
 
@@ -243,4 +262,16 @@
 </div>
 <div class="source-pacman" style="display:none;">
 	<img class="pacman sprite-pacman" src="/public/img/pacman-r.gif" />
+</div>
+<div class="modal fade" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" style="">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-body">
+		  <h1 class="text-center">Loading</h1>
+		  <div class="progress">
+			<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div>
+		  </div>
+		</div>          
+	  </div>
+	</div>
 </div>

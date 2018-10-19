@@ -3,7 +3,7 @@
 	  <h3 class="masthead-brand">Pacman</h3>
 	  <nav class="nav nav-masthead justify-content-center">
 		<a class="nav-link<?=$nav=='play'?' active':'' ?>" href="/play">Play</a>
-		<a class="nav-link<?=$nav=='rank'?' active':'' ?>" href="/rank">Rank</a>
+		<a class="nav-link<?=$nav=='rank'?' active':'' ?>" href="/rank">Ranking</a>
 	  <?php if(false === $this->auth->isUserSignedIn()): ?>
 		<a class="nav-link<?=$nav=='user'?' active':'' ?>" href="/user/login">Login</a>
 		

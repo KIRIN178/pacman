@@ -1,5 +1,6 @@
-var level = 79;
-var life = 3;
+var myApp;
+var level = 0;
+var life = 0;
 var score = 0;
 var map = Array();
 var pac_position;
@@ -7,19 +8,46 @@ var ghost = Array();
 var g_seq = 0;
 var status = 0;
 var command = Array();	//'u':up,'r':right,'d':down,'l':left
-var pac_speed = 100;
-var ghost_speed = 1500;
+var pac_speed = 800;	//800
+var ghost_speed = 2000;
+var ghost_score = 200;
 var arr_timer = Array();
+var is_over_ten_thousand = false;
 $( document ).ready(function() {
+	initSetting();
 	initBtn();
 	initMap();
 })
+function addLife() {
+	life++;
+	if(life > 3)
+		life = 3;
+	$('main .life').text(life);
+}
+function checkGetBonusLife() {
+	if(score >= 10000 && !is_over_ten_thousand)
+	{
+		addLife();
+		is_over_ten_thousand = true;
+	}
+}
+function ghostDead(seq) {
+	score += ghost_score;
+	checkGetBonusLife();
+	ghost_score *= 2;
+	ghost[seq] = Array();
+	$('main .seq-'+seq).remove();
+	arr_timer.push(setTimeout(function(){_ghostGenerate();},5000));
+}
 function ghostMove(obj, seq) {
 	if($(ghost).length == 0)
 		return;
+	if($(ghost[seq]["position"]).length == 0)
+		return;
 	if(ghost[seq]["command"].length == 0)
 		_ghostMoveCommand(seq);
-	_ghostMoveAnimate(obj, seq, ghost[seq]["command"].pop());
+	if(_ghostMoveCheck(seq))
+		_ghostMoveAnimate(obj, seq, ghost[seq]["command"].pop());
 }
 function initBtn() {
 	$(document).on('click','.btn-play', function() {
@@ -28,7 +56,6 @@ function initBtn() {
 		$('main .score-panel').show();
 		initKeyboard();
 	});
-	$('body').css('overflow-y','hidden')
 }
 function initKeyboard() {
 	$(document).on('keydown', function(e) {
@@ -2112,8 +2139,21 @@ function initMap() {
 		}
 	}
 }
+function initSetting() {
+	life = parseInt($('.life').text());
+	$('body').css('overflow-y','hidden');
+}
+function pacmanBecomeNormal() {
+	$('main .sprite-ghost').each(function(idx,ele){
+		$(ele).removeClass('blink_me');
+		$(ele).attr('src',$(ele).attr('src').replace('-x','-y'));
+	})
+	status = 0;
+	ghost_score = 200;
+}
 function pacmanDead() {
 	$('main .sprite-pacman').stop();
+	$('main .sprite-ghost').stop();
 	$(arr_timer).each(function(idx,ele){
 		clearTimeout(ele);
 	})
@@ -2121,7 +2161,37 @@ function pacmanDead() {
 	life--;
 	if(life < 0)
 	{
-		
+		ghost = Array();
+		$('main .level-panel').remove();
+		$('main .game-panel').remove();
+		$('main .score-panel').remove();
+		$('.loading').show();
+		$.ajax({
+		  type: "POST",
+		  dataType: 'json',
+		  url: "/user/score",
+		  data: {level:level,score:score},
+		  success: function(msg){
+			  $('.loading').hide();
+			  if(msg.status == 'ok')
+			  {
+				  
+				  $('main .last-level').text(numberWithCommas(level));
+				  $('main .last-score').text(numberWithCommas(score));
+				  $('main .highest-level').text(numberWithCommas(msg.level));
+				  $('main .total-score').text(numberWithCommas(msg.score));
+				  $('main .team-score').text(numberWithCommas(msg.teamScore));
+				  $('main .result-panel').show();
+			  }
+			  else
+			  {
+				  alert('error');
+			  }
+		  },
+		  error: function(XMLHttpRequest, textStatus, errorThrown) {
+			console.log(errorThrown);
+		  }
+		});
 	}
 	else
 	{
@@ -2194,11 +2264,19 @@ function pacmanMove() {
 			command.shift();
 	}
 }
+function pacmanWeaken() {
+	$('main .sprite-ghost').each(function(idx,ele){
+		$(ele).addClass('blink_me');
+	})
+	arr_timer.push(setTimeout(function(){pacmanBecomeNormal()},5000))
+}
 function prepareMap() {
 	$('.map-template').children('div').each(function(idx,ele){
 		$(ele).attr('class','g'+map[level%10][idx]);
 	})
 	ghost_speed = ghost_speed - 10*level;
+	if(ghost_speed <= 200)
+		ghost_speed == 200;
 	$('.map-template').children('img').insertBefore($('.map-template').children('div.g0'));
 	$('.map-template').children('div.g0').addClass('start');
 	pac_position = $('.map-template').children('div.g0').index()-1;
@@ -2270,17 +2348,20 @@ function _ghostInsert(obj) {
 	var seq = g_seq;
 	g_seq++;
 	$(obj_ghost).insertBefore(obj);
+	$(obj_ghost).addClass('seq-'+seq);
+	if(status == 1)
+		$(obj_ghost).attr('src',$(obj_ghost).attr('src').replace('-y','-x'));
 	ghostMove(obj_ghost,seq);
 }
 function _ghostGenerate() {
 	var num = Math.floor(level/10);
-	if(num < 2)
-		num = 2;
+	if(num < 1)
+		num = 1;
 	var ghost = (4-$('main .game-panel').children('div.g3').length) + $('main .sprite-ghost').length;
 	if(ghost >= num)
 		return;
 	var seed = $('main .game-panel').children('div.g3').length;
-	var rand = Math.floor(Math.random() * seed-1);
+	var rand = Math.floor(Math.random() * seed);
 	var obj = $('main .game-panel').children('div.g3').eq(rand);
 	$(obj).attr('class','g3-5');
 	arr_timer.push(setTimeout(function(){_ghostDealGrave(obj)}, 1000));
@@ -2304,6 +2385,30 @@ function _ghostMoveAnimate(obj, seq, way) {
 		$(obj).animate({left:"-=20"},ghost_speed,function(){_ghostMoveUpdatePosition(obj,seq,-1)});
 	}
 }
+function _ghostMoveCheck(seq) {
+	var way = ghost[seq]["command"][0];
+	if(way == 'u')
+	{
+		if($('main .game-panel').children('div').eq(ghost[seq]["position"]-31).attr('class') != 'g4')
+			return true;
+	}
+	else if(way == 'r')
+	{
+		if($('main .game-panel').children('div').eq(ghost[seq]["position"]+1).attr('class') != 'g4')
+			return true;
+	}
+	else if(way == 'd')
+	{
+		if($('main .game-panel').children('div').eq(ghost[seq]["position"]+31).attr('class') != 'g4')
+			return true;
+	}
+	else if(way == 'l')
+	{
+		if($('main .game-panel').children('div').eq(ghost[seq]["position"]-1).attr('class') != 'g4')
+			return true;
+	}
+	return false;
+}
 function _ghostMoveCommand(seq) {
 	var row = Math.floor(ghost[seq]["position"]/31);
 	var upper = 31*(row+1) - 1;
@@ -2315,7 +2420,32 @@ function _ghostMoveCommand(seq) {
 		if(pac_position == i)
 		{
 			is_find = true;
-			way = 'u';
+			if(status == 0)
+				way = 'u';
+			else
+			{
+				var is_pass = false;
+				while(!is_pass)
+				{
+					var rand = Math.floor(Math.random() * 3);
+					if(rand == 0)
+					{
+						ghost[seq]["command"].push('r');
+						is_pass = _ghostMoveCheck(seq);
+					}
+					else if(rand == 1)
+					{
+						ghost[seq]["command"].push('d');
+						is_pass = _ghostMoveCheck(seq);
+					}
+					else if(rand == 2)
+					{
+						ghost[seq]["command"].push('l');
+						is_pass = _ghostMoveCheck(seq);
+					}
+					way = ghost[seq]["command"].pop();
+				}
+			}
 			break;
 		}
 	}
@@ -2326,7 +2456,32 @@ function _ghostMoveCommand(seq) {
 			if(pac_position == i)
 			{
 				is_find = true;
-				way = 'd';
+				if(status == 0)
+					way = 'd';
+				else
+				{
+					var is_pass = false;
+					while(!is_pass)
+					{
+						var rand = Math.floor(Math.random() * 3);
+						if(rand == 0)
+						{
+							ghost[seq]["command"].push('u');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						else if(rand == 1)
+						{
+							ghost[seq]["command"].push('r');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						else if(rand == 2)
+						{
+							ghost[seq]["command"].push('l');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						way = ghost[seq]["command"].pop();
+					}
+				}
 				break;
 			}
 		}
@@ -2336,17 +2491,72 @@ function _ghostMoveCommand(seq) {
 		if(pac_position >= lower && pac_position <= upper)
 		{
 			if(ghost[seq]["position"] > pac_position)
-				way = 'l';
+			{
+				if(status == 0)
+					way = 'l';
+				else
+				{
+					var is_pass = false;
+					while(!is_pass)
+					{
+						var rand = Math.floor(Math.random() * 3);
+						if(rand == 0)
+						{
+							ghost[seq]["command"].push('u');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						else if(rand == 1)
+						{
+							ghost[seq]["command"].push('r');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						else if(rand == 2)
+						{
+							ghost[seq]["command"].push('d');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						way = ghost[seq]["command"].pop();
+					}
+				}
+			}
 			else
-				way = 'r';
+			{
+				if(status == 0)
+					way = 'r';
+				else
+				{
+					var is_pass = false;
+					while(!is_pass)
+					{
+						var rand = Math.floor(Math.random() * 3);
+						if(rand == 0)
+						{
+							ghost[seq]["command"].push('u');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						else if(rand == 1)
+						{
+							ghost[seq]["command"].push('d');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						else if(rand == 2)
+						{
+							ghost[seq]["command"].push('l');
+							is_pass = _ghostMoveCheck(seq);
+						}
+						way = ghost[seq]["command"].pop();
+					}
+				}
+			}
 			is_find = true;
 		}
 	}
+	ghost[seq]["command"] = Array();
 	if(!is_find)
 	{
 		while(!is_find)
 		{
-			var rand = Math.floor(Math.random() * 3);
+			var rand = Math.floor(Math.random() * 4);
 			if(rand == 0)
 			{
 				if($('main .game-panel').children('div').eq(ghost[seq]["position"]-31).attr('class') != 'g4')
@@ -2388,8 +2598,59 @@ function _ghostMoveCommand(seq) {
 	}
 }
 function _ghostMoveDealCollision(seq) {
-	if(ghost[seq]["position"] == pac_position)
-		pacmanDead();
+	if(typeof command[0] !== 'undefined')
+	{
+		if(command[0] == 'u')
+		{
+			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position-31)
+			{
+				if(status == 0)
+					pacmanDead();
+				else
+					ghostDead(seq);
+			}
+		}
+		else if(command[0] == 'r')
+		{
+			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position+1)
+			{
+				if(status == 0)
+					pacmanDead();
+				else
+					ghostDead(seq);
+			}
+		}
+		else if(command[0] == 'd')
+		{
+			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position+31)
+			{
+				if(status == 0)
+					pacmanDead();
+				else
+					ghostDead(seq);
+			}
+		}
+		else if(command[0] == 'l')
+		{
+			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position-1)
+			{
+				if(status == 0)
+					pacmanDead();
+				else
+					ghostDead(seq);
+			}
+		}
+	}
+	else
+	{
+		if(ghost[seq]["position"] == pac_position)
+		{
+			if(status == 0)
+				pacmanDead();
+			else
+				ghostDead(seq);
+		}
+	}
 }
 function _ghostMoveFindDiversion(seq, way){
 	var times = 0;
@@ -2438,7 +2699,7 @@ function _ghostMoveFindDiversion(seq, way){
 	return times;
 }
 function _ghostMoveUpdatePosition(obj, seq, num) {
-	if($(ghost).length == 0)
+	if($(ghost[seq]["position"]).length == 0)
 		return;
 	ghost[seq]["position"] += num;
 	_ghostMoveDealCollision(seq);
@@ -2472,8 +2733,59 @@ function _pacMoveAnimate(way) {
 }
 function _pacMoveDealCollision() {
 	$(ghost).each(function(idx,ele){
-		if(ele["position"] == pac_position)
-			pacmanDead();
+		if(typeof command[0] !== 'undefined')
+		{
+			if(command[0] == 'u')
+			{
+				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]+31 == pac_position)
+				{
+					if(status == 0)
+						pacmanDead();
+					else
+						ghostDead(idx);
+				}
+			}
+			else if(command[0] == 'r')
+			{
+				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]-1 == pac_position)
+				{
+					if(status == 0)
+						pacmanDead();
+					else
+						ghostDead(idx);
+				}
+			}
+			else if(command[0] == 'd')
+			{
+				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]-31 == pac_position)
+				{
+					if(status == 0)
+						pacmanDead();
+					else
+						ghostDead(idx);
+				}
+			}
+			else if(command[0] == 'l')
+			{
+				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]+1 == pac_position)
+				{
+					if(status == 0)
+						pacmanDead();
+					else
+						ghostDead(idx);
+				}
+			}
+		}
+		else
+		{
+			if(ele["position"] == pac_position)
+			{
+				if(status == 0)
+					pacmanDead();
+				else
+					ghostDead(idx);
+			}
+		}
 	})
 }
 function _pacMoveDealEndGame() {
@@ -2485,6 +2797,7 @@ function _pacMoveDealEndGame() {
 		})
 		command = Array();
 		level++;
+		addLife();
 		$('main .level').text(numberWithCommas(level));
 		ghost = Array();
 		g_seq = 0;
@@ -2495,10 +2808,20 @@ function _pacMoveDealObject() {
 	if($('main .game-panel').children('div').eq(pac_position).attr('class') == 'g1')
 	{
 		score += 10;
+		checkGetBonusLife();
 		$('main .score').text(numberWithCommas(score));
-		$('main .game-panel').children('div').eq(pac_position).attr('class','g0')
+		$('main .game-panel').children('div').eq(pac_position).attr('class','g0');
+		_pacMoveDealEndGame();
 	}
-	_pacMoveDealEndGame();
+	else if($('main .game-panel').children('div').eq(pac_position).attr('class') == 'g2')
+	{
+		status = 1;
+		$('main .game-panel').children('div').eq(pac_position).attr('class','g0');
+		$('main .sprite-pacman').css('z-index','300');
+		if($('main .sprite-ghost').length > 0)
+			$('main .sprite-ghost').attr('src',$('main .sprite-ghost').attr('src').replace('-y','-x'));
+		arr_timer.push(setTimeout(function(){pacmanWeaken()},10000))
+	}
 }
 function _pacMoveUpdatePosition(num) {
 	pac_position += num;

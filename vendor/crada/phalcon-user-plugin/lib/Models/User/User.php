@@ -4,6 +4,7 @@ namespace Phalcon\UserPlugin\Models\User;
 
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Uniqueness;
+use Phalcon\Mvc\Model\Resultset\Simple as Resultset;
 
 class User extends \Phalcon\Mvc\Model
 {
@@ -156,6 +157,7 @@ class User extends \Phalcon\Mvc\Model
      */
     protected $updated_at;
 
+	protected $extra_life;
     /**
      * Method to set the value of field id.
      *
@@ -983,4 +985,36 @@ class User extends \Phalcon\Mvc\Model
             //);
         }
     }
+	public function getExtraLife()
+	{
+		return $this->extra_life;
+	}
+	public function getRankRow()
+	{
+		$sql = 'SELECT user.id,user.email,user.level,user.last_datetime,user.score+(CASE WHEN A.score IS NULL THEN 0 ELSE A.score END) AS score FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id';
+		$user = new User();
+		$query = new Resultset(
+            null,
+            $user,
+            $user->getReadConnection()->query($sql)
+        );
+		$ret = array();
+		foreach($query as $row)
+		{
+			$temp["id"] = $row->id;
+			$arr_name = explode('@',$row->email);
+			$temp["name"] = $arr_name[0];
+			$temp["level"] = $row->level;
+			$temp["last_datetime"] = $row->last_datetime;
+			$temp["score"] = $row->score;
+			$ret[] = $temp;
+		}
+		return $ret;
+		$modelsManager = $di->getModelsManager();
+		//$di = Phalcon\DI::getDefault();
+		$rank = $modelsManager->createQuery('SELECT user.* FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id WHERE user.id=17')->execute();;
+		
+		echo 'aaa';
+		return null;
+	}
 }

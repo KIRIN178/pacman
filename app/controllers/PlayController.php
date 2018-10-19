@@ -1,4 +1,5 @@
 <?php
+use Phalcon\UserPlugin\Models\User\User;
 
 class PlayController extends \Phalcon\Mvc\Controller
 {
@@ -18,6 +19,12 @@ class PlayController extends \Phalcon\Mvc\Controller
 		$this->view->nav = 'play';
 		if(false === $this->auth->isUserSignedIn())
 			$this->view->pick('play/warning');
+		else
+		{
+			$id = $this->session->get('')["id"];
+			$user = User::findFirst($id);
+			$this->view->extra_life = $user->getExtraLife();
+		}
     }
 }
 

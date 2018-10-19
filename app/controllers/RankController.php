@@ -1,4 +1,5 @@
 <?php
+use Phalcon\UserPlugin\Models\User\User;
 
 class RankController extends \Phalcon\Mvc\Controller
 {
@@ -15,7 +16,12 @@ class RankController extends \Phalcon\Mvc\Controller
 	
     public function indexAction()
     {
-
+		//$this->view->disable();
+		$di = Phalcon\DI::getDefault();
+		$user = new User();
+		$this->view->rank = $user->getRankRow();
+		//$data["rank"] = $user->getRankRow($di);
+		//$this->view->rank = $data["rank"];
     }
 
 }

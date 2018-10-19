@@ -3,6 +3,7 @@ use Phalcon\UserPlugin\Models\User\User;
 use Phalcon\UserPlugin\Models\User\UserResetPasswords;
 use Phalcon\UserPlugin\Models\User\UserPasswordChanges;
 use Phalcon\UserPlugin\Models\User\UserEmailConfirmations;
+use Phalcon\UserPlugin\Models\User\UserUpdateScore;
 
 use Phalcon\UserPlugin\Forms\User\LoginForm;
 use Phalcon\UserPlugin\Forms\User\RegisterForm;
@@ -33,7 +34,72 @@ class UserController extends \Phalcon\Mvc\Controller
 		//$this->response->redirect('play');
 		
     }
-	
+	public function scoreAction()
+	{
+		$this->view->disable();
+		if($this->request->isPost())
+		{
+			if(true === $this->auth->isUserSignedIn())
+			{
+				$id = $this->session->get('')["id"];
+				$scores = UserUpdateScore::sum(
+				[
+					'column' => 'score',
+					'conditions' => 'group_id = '.$id,
+					'group' => 'group_id'
+				]);
+				$group_score = 0;
+				foreach($scores as $sc)
+				{
+					$group_score = $sc->sumatory;
+				}
+				$last_level = $this->request->getPost('level');
+				$last_score = $this->request->getPost('score');
+				$userUpdateScore = UserUpdateScore::findFirst($id);
+				$level = $userUpdateScore->getLevel();
+				$score = $userUpdateScore->getScore();
+				if($last_level > 0)
+				{
+					$score += $last_score;
+					$team_score = $group_score + $last_score;
+					if($last_level > $level)
+						$level = $last_level;
+					//Add extra life
+					$addExtraLife = UserUpdateScore::find([
+						'conditions' => 'group_id='.$id
+					]);
+					foreach($addExtraLife as $ob) {
+						$ob->setExtraLife($last_level);
+						$ob->update();
+					}
+				}
+				else
+					$team_score = $group_score;
+				$userUpdateScore->setScore($score);
+				$userUpdateScore->setLevel($level);
+				$userUpdateScore->setLast_level($last_level);
+				$userUpdateScore->setLast_score($last_score);
+				$userUpdateScore->clearExtraLife();
+				date_default_timezone_set("Asia/Tokyo");
+				$date = new DateTime();
+				$date = $date->format('Y-m-d H:i:s+9');
+				$userUpdateScore->setLast_datetime($date);
+				$userUpdateScore->update();
+				$ret["status"] = 'ok';
+				$ret["level"] = $level;
+				$ret["score"] = $score;
+				$ret["teamScore"] = $team_score;
+				echo json_encode($ret);
+			}
+			else
+			{
+				$ret["status"] = 'error';
+				$ret["msg"] = 'Please login.';
+				echo json_encode($ret);
+			}
+		}
+		
+	}
 	 /**
      * Login user
      * @return \Phalcon\Http\ResponseInterface
@@ -150,7 +216,7 @@ class UserController extends \Phalcon\Mvc\Controller
                     'name' => '',
                     'email' => $this->request->getPost('email'),
                     'password' => $this->security->hash($this->request->getPost('password')),
-                    'group_id' => 2,
+                    'group_id' => -1,
                     'banned' => 0,
                     'suspended' => 0
                 ));

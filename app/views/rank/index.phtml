@@ -2,12 +2,31 @@
   <?php $this->partial('nav'); ?>
 
   <main role="main" class="inner cover">
-	<h1 class="cover-heading">Cover your page.</h1>
-	<p class="lead">You're now flying with Phalcon. Great things are about to happen!</p>
-	<p class="lead">This page is located at <code>views/rank/index.phtml</code></p>
-	<p class="lead">
-	  <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-	</p>
+	<h1 class="cover-heading">Leader Board</h1>
+	<table class="table table-striped">
+    <thead>
+    <tr>
+        <th class="rank">Rank</th>
+        <th class="name">Name</th>
+        <th class="score">Score</th>
+        <th class="level">Level</th>
+		<th class="last">Last Play</th>
+    </tr>
+    </thead>
+    <tbody>
+	<?php foreach($rank as $i=>$row): ?>
+    <tr>
+        <td class="rank"><?=$i+1 ?></td>
+        <td class="name"><?=$row["name"] ?></td>
+        <td class="score"><?=number_format($row["score"]) ?></td>
+        <td class="level"><?=number_format($row["level"]) ?></td>
+		<td class="last"><?=$row["last_datetime"] ?></td>
+    </tr>
+	<?php endforeach; ?>
+    
+    </tbody>
+	</table>
+	
   </main>
 
   <footer class="mastfoot mt-auto">

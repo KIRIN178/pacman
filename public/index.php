@@ -7,6 +7,9 @@ use Phalcon\UserPlugin\Auth\Auth;
 use Phalcon\UserPlugin\Acl\Acl;
 use Phalcon\UserPlugin\Mail\Mail;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Db\Profiler as ProfilerDb;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Db\Adapter\Pdo\Mysql as MysqlPdo;
 
 error_reporting(E_ALL);
 
@@ -85,11 +88,31 @@ try {
 		}
 	);
 	
+	//DB debugger
+	$di->set('profiler', function () {
+		return new ProfilerDb();
+	}, true);
+	
 	// Setup the database service
 	$di->set(
 		'db',
-		function () {
-			return new DbAdapter(
+		function () use ($di){
+			$eventsManager = new EventsManager();
+
+			// Get a shared instance of the DbProfiler
+			$profiler      = $di->getProfiler();
+
+			// Listen all the database events
+			$eventsManager->attach('db', function ($event, $connection) use ($profiler) {
+				if ($event->getType() == 'beforeQuery') {
+					$profiler->startProfile($connection->getSQLStatement());
+				}
+
+				if ($event->getType() == 'afterQuery') {
+					$profiler->stopProfile();
+				}
+			});
+			$connection = new DbAdapter(
 				[
 					'host'     => '127.0.0.1',
 					'username' => 'root',
@@ -97,8 +120,13 @@ try {
 					'dbname'   => 'pacman',
 				]
 			);
+			$connection->setEventsManager($eventsManager);
+			return $connection;
 		}
 	);
+	
+	
+	
 	
     echo str_replace(["\n","\r","\t"], '', $application->handle()->getContent());
 
