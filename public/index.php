@@ -75,7 +75,7 @@ try {
 	
 	$di->setShared(
 		'dispatcher',
-		function() use ($di) {
+		function() use ($di, $config) {
 			$eventsManager = $di->getShared('eventsManager');
 
 			$security = new SecurityPlugin($di);
@@ -84,6 +84,37 @@ try {
 			$dispatcher = new Dispatcher();
 			$dispatcher->setEventsManager($eventsManager);
 
+			$dispatcher->setDefaultNamespace('Naruhodo\Controllers');
+
+			//in production
+			if($config->application->production)
+			{
+				 //set event for 404
+				$evManager = $di->getShared('eventsManager');
+
+				$evManager->attach(
+					'dispatch:beforeException',
+					function($event, $dispatcher, $exception)
+					{
+						switch ($exception->getCode()) {
+							case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+							case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
+							default:
+								$dispatcher->forward(
+									array(
+										'controller' => 'error',
+										'action'     => 'show404'
+									)
+								);
+
+							return false;
+						}
+					}
+				);
+
+				$dispatcher->setEventsManager($evManager);
+			}
+			
 			return $dispatcher;
 		}
 	);

@@ -1,0 +1,29 @@
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <?php $this->partial('nav'); ?>
+
+  <main role="main" class="inner cover">
+	<h1 class="cover-heading"><?=$name ?></h1>
+	<hr>
+	<h2>Level: <?=$level ?></h2>
+	<h2>Score: <?=number_format($score) ?></h2>
+	<br><br>
+	<h1 class="cover-heading">Team</h1>
+	<hr>
+	<h2>Team Score: <?=number_format($team_score) ?></h2>
+	<?php if(!is_null($following)): ?>
+	<h2>Following: <?=$following ?></h2>
+	<?php endif; ?>
+	<h2>Follower List</h2>
+	<table class="table">
+    <tbody>
+	<?php foreach($follower as $idx=>$person): ?>
+		<tr>
+			<td class="seq"><?=$idx ?></td>
+			<td class="follower"><?=$person ?></td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+  </main>
+
+  <?php $this->partial('footer'); ?>
+</div>

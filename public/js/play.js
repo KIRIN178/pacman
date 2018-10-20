@@ -2600,7 +2600,7 @@ function _ghostMoveCommand(seq) {
 function _ghostMoveDealCollision(seq) {
 	if(typeof command[0] !== 'undefined')
 	{
-		if(command[0] == 'u')
+		if(command[0] == 'u' && ghost[seq]["position"] == 'd')
 		{
 			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position-31)
 			{
@@ -2610,7 +2610,7 @@ function _ghostMoveDealCollision(seq) {
 					ghostDead(seq);
 			}
 		}
-		else if(command[0] == 'r')
+		else if(command[0] == 'r' && ghost[seq]["position"] == 'l')
 		{
 			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position+1)
 			{
@@ -2620,7 +2620,7 @@ function _ghostMoveDealCollision(seq) {
 					ghostDead(seq);
 			}
 		}
-		else if(command[0] == 'd')
+		else if(command[0] == 'd' && ghost[seq]["position"] == 'u')
 		{
 			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position+31)
 			{
@@ -2630,7 +2630,7 @@ function _ghostMoveDealCollision(seq) {
 					ghostDead(seq);
 			}
 		}
-		else if(command[0] == 'l')
+		else if(command[0] == 'l' && ghost[seq]["position"] == 'r')
 		{
 			if(ghost[seq]["position"] == pac_position || ghost[seq]["position"] == pac_position-1)
 			{
@@ -2640,6 +2640,18 @@ function _ghostMoveDealCollision(seq) {
 					ghostDead(seq);
 			}
 		}
+		else
+		{
+			if(ghost[seq]["position"] == pac_position)
+			{
+				if(status == 0)
+					pacmanDead();
+				else
+					ghostDead(seq);
+			}
+		}
+			
+		
 	}
 	else
 	{
@@ -2735,7 +2747,7 @@ function _pacMoveDealCollision() {
 	$(ghost).each(function(idx,ele){
 		if(typeof command[0] !== 'undefined')
 		{
-			if(command[0] == 'u')
+			if(command[0] == 'u' && ghost[idx]["position"] == 'd')
 			{
 				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]+31 == pac_position)
 				{
@@ -2745,7 +2757,7 @@ function _pacMoveDealCollision() {
 						ghostDead(idx);
 				}
 			}
-			else if(command[0] == 'r')
+			else if(command[0] == 'r' && ghost[idx]["position"] == 'l')
 			{
 				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]-1 == pac_position)
 				{
@@ -2755,7 +2767,7 @@ function _pacMoveDealCollision() {
 						ghostDead(idx);
 				}
 			}
-			else if(command[0] == 'd')
+			else if(command[0] == 'd' && ghost[idx]["position"] == 'u')
 			{
 				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]-31 == pac_position)
 				{
@@ -2765,9 +2777,19 @@ function _pacMoveDealCollision() {
 						ghostDead(idx);
 				}
 			}
-			else if(command[0] == 'l')
+			else if(command[0] == 'l' && ghost[idx]["position"] == 'r')
 			{
 				if(ghost[idx]["position"] == pac_position || ghost[idx]["position"]+1 == pac_position)
+				{
+					if(status == 0)
+						pacmanDead();
+					else
+						ghostDead(idx);
+				}
+			}
+			else
+			{
+				if(ghost[idx]["position"] == pac_position)
 				{
 					if(status == 0)
 						pacmanDead();

@@ -158,6 +158,8 @@ class User extends \Phalcon\Mvc\Model
     protected $updated_at;
 
 	protected $extra_life;
+	protected $level;
+	protected $score;
     /**
      * Method to set the value of field id.
      *
@@ -1016,5 +1018,42 @@ class User extends \Phalcon\Mvc\Model
 		
 		echo 'aaa';
 		return null;
+	}
+	public function getTeamScore($id)
+	{
+		$sql = 'SELECT user.id,user.email,user.level,user.last_datetime,user.score+(CASE WHEN A.score IS NULL THEN 0 ELSE A.score END) AS score FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id WHERE user.id='.$id;
+		$user = new User();
+		$query = new Resultset(
+            null,
+            $user,
+            $user->getReadConnection()->query($sql)
+        );
+		$ret = array();
+		foreach($query as $row)
+		{
+			$score = $row->score;
+		}
+		return $score;
+	}
+	public function getFollower($id)
+	{
+		$user = User::find([
+			'conditions' => 'group_id='.$id
+		]);
+		$ret = array();
+		foreach($user as $row)
+		{
+			$arr_name = explode('@', $row->getEmail());
+			$ret[] = $arr_name[0];
+		}
+		return $ret;
+	}
+	public function getLevel()
+	{
+		return $this->level;
+	}
+	public function getScore()
+	{
+		return $this->score;
 	}
 }

@@ -331,7 +331,20 @@ td.last, th.last {
 	width: 180px;
 	text-align: center;
 }
+td.seq {
+	width: 10%;
+}
+td.follower {
+	width: 90%;
+}
 tbody td, thead th {
     
     float: left;
+}
+tr.shift span {
+	position: relative;
+	top: 14px;
+}
+hr {
+  border-top: 1px solid orange;
 }

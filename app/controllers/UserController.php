@@ -34,6 +34,34 @@ class UserController extends \Phalcon\Mvc\Controller
 		//$this->response->redirect('play');
 		
     }
+	public function followAction()
+	{
+		if($this->request->isPost())
+		{
+			if(true === $this->auth->isUserSignedIn())
+			{
+				$target_id = $this->request->getPost('target_id');
+				$user = User::findfirst($this->session->get('')["id"]);
+				$user->setGroupId($target_id);
+				$user->update();		
+			}
+		}
+		$this->response->redirect('/rank');
+	}
+	public function unfollowAction()
+	{
+		if($this->request->isPost())
+		{
+			if(true === $this->auth->isUserSignedIn())
+			{
+				$target_id = $this->request->getPost('target_id');
+				$user = User::findfirst($this->session->get('')["id"]);
+				$user->setGroupId(0);
+				$user->update();
+			}
+		}
+		$this->response->redirect('/rank');
+	}
 	public function scoreAction()
 	{
 		$this->view->disable();
@@ -61,7 +89,6 @@ class UserController extends \Phalcon\Mvc\Controller
 				if($last_level > 0)
 				{
 					$score += $last_score;
-					$team_score = $group_score + $last_score;
 					if($last_level > $level)
 						$level = $last_level;
 					//Add extra life
@@ -73,8 +100,7 @@ class UserController extends \Phalcon\Mvc\Controller
 						$ob->update();
 					}
 				}
-				else
-					$team_score = $group_score;
+				$team_score = $group_score + $score;
 				$userUpdateScore->setScore($score);
 				$userUpdateScore->setLevel($level);
 				$userUpdateScore->setLast_level($last_level);

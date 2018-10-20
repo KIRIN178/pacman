@@ -22,21 +22,18 @@
 		<br>
 		<h3>Last Level: <span class="last-level"></span></h3>
 		<h3>Last Score: <span class="last-score"></span></h3>
+		<p>(If game is over at level 0, the scores won't be added to your total score.)</p>
 		<br>
 		<h3>Highest Level: <span class="highest-level"></span></h3>
 		<h3>Total Score: <span class="total-score"></span></h3>
 		<br>
-		<h3>Score of Your Team: <span class="team-score"></span></h3>
+		<h3>Team Score: <span class="team-score"></span></h3>
 		<br>
 		<a href="/play">≫Play again</a>
 	</div>
   </main>
 
-  <footer class="mastfoot mt-auto">
-	<div class="inner">
-	  <p>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-	</div>
-  </footer>
+  <?php $this->partial('footer'); ?>
 </div>
 <div class="map-template game-panel" style="display:none;">
 	<img class="pacman sprite-pacman" src="/public/img/pacman-r.gif" />
