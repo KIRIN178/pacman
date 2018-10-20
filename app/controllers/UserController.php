@@ -464,10 +464,5 @@ class UserController extends \Phalcon\Mvc\Controller
 
         return $this->response->redirect($this->_activeLanguage.'/user/profile');
     }
-
-    public function profileAction()
-    {
-
-    }
 }
 
