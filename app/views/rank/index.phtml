@@ -17,46 +17,48 @@
 	<br>
 	<p>There is no user yet.</p>
 	<?php else: ?>
-	<table class="table">
-    <thead>
-    <tr>
-        <th class="rank">Rank</th>
-        <th class="name">Name</th>
-        <th class="score">Score</th>
-        <th class="level">Level</th>
-		<th class="last">Last Play</th>
-    </tr>
-    </thead>
-    <tbody>
-	<?php foreach($rank as $i=>$row): ?>
-    <tr<?php if($this->auth->isUserSignedIn()){if($row["id"]==$id){echo ' class="text-danger"';}else{echo ' class="shift"';}} ?>>
-        <td class="rank"><span><?=$i+1 ?></span></td>
-        <td class="name">
-			<?=$row["name"] ?>
-			<?php if($this->auth->isUserSignedIn()): ?>
-			<?php if($row["id"]!=$id): ?>
-					<?php if($row["id"]!=$group_id): ?>
-				<?php echo $this->tag->form("user/follow"); ?>
-					<input type="text" name="target_id" class="hidden" value="<?=$row["id"] ?>" />
-					<button type="submit" class="btn btn-primary btn-sm">Follow</button>
-				</form>
-					<?php else: ?>
-				<?php echo $this->tag->form("user/unfollow"); ?>
-					<input type="text" name="target_id" class="hidden" value="<?=$row["id"] ?>" />
-					<button type="submit" class="btn btn-warning btn-sm">Unfollow</button>
-				</form>
-					<?php endif; ?>
-				
-			<?php endif; ?><?php endif; ?>
-		</td>
-        <td class="score"><span><?=number_format($row["score"]) ?></span></td>
-        <td class="level"><span><?=number_format($row["level"]) ?></span></td>
-		<td class="last"><span><?=$row["last_datetime"] ?></span></td>
-    </tr>
-	<?php endforeach; ?>
-    
-    </tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table">
+		<thead>
+		<tr>
+			<th class="rank">Rank</th>
+			<th class="name">Name</th>
+			<th class="score">Score</th>
+			<th class="level">Level</th>
+			<th class="last">Last Play</th>
+		</tr>
+		</thead>
+		<tbody>
+		<?php foreach($rank as $i=>$row): ?>
+		<tr<?php if($this->auth->isUserSignedIn()){if($row["id"]==$id){echo ' class="text-danger"';}else{echo ' class="shift"';}} ?>>
+			<td class="rank"><span><?=$i+1 ?></span></td>
+			<td class="name">
+				<?=$row["name"] ?>
+				<?php if($this->auth->isUserSignedIn()): ?>
+				<?php if($row["id"]!=$id): ?>
+						<?php if($row["id"]!=$group_id): ?>
+					<?php echo $this->tag->form("user/follow"); ?>
+						<input type="text" name="target_id" class="hidden" value="<?=$row["id"] ?>" />
+						<button type="submit" class="btn btn-primary btn-sm">Follow</button>
+					</form>
+						<?php else: ?>
+					<?php echo $this->tag->form("user/unfollow"); ?>
+						<input type="text" name="target_id" class="hidden" value="<?=$row["id"] ?>" />
+						<button type="submit" class="btn btn-warning btn-sm">Unfollow</button>
+					</form>
+						<?php endif; ?>
+
+				<?php endif; ?><?php endif; ?>
+			</td>
+			<td class="score"><span><?=number_format($row["score"]) ?></span></td>
+			<td class="level"><span><?=number_format($row["level"]) ?></span></td>
+			<td class="last"><span><?=$row["last_datetime"] ?></span></td>
+		</tr>
+		<?php endforeach; ?>
+
+		</tbody>
+		</table>
+	</div>
 	<?php endif; ?>
   </main>
 
