@@ -240,7 +240,7 @@ class UserController extends \Phalcon\Mvc\Controller
                 $user = new User();
                 $user->assign(array(
                     'name' => '',
-                    'email' => $this->request->getPost('email'),
+                    'email' => strtolower($this->request->getPost('email')),
                     'password' => $this->security->hash($this->request->getPost('password')),
                     'group_id' => -1,
                     'banned' => 0,
@@ -255,9 +255,18 @@ class UserController extends \Phalcon\Mvc\Controller
 					$this->view->is_error = true;
                 } else {
                     //$this->view->disable();
-                    //return $this->response->redirect($this->_activeLanguage.'/user/register');
-					$this->auth->login($form);
-					$this->response->redirect('play');
+                    $form = new LoginForm();
+					try {
+						$this->auth->login($form);
+					} catch (AuthException $e) {
+						$this->flash->error($e->getMessage());
+					}
+					//echo strtolower($this->request->getPost('email'));
+					//$user = User::findFirstByEmail(strtolower($this->request->getPost('email')));
+					//$this->auth->saveSuccessLogin($user);
+					//var_dump($this->auth->isUserSignedIn());
+					//$this->auth->login($form);
+					//$this->response->redirect('play');
                 }
             }
         }

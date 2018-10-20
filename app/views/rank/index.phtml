@@ -1,8 +1,18 @@
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1&appId=1418954798320001&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <?php $this->partial('nav'); ?>
 
   <main role="main" class="inner cover">
-	<h1 class="cover-heading">Leader Board</h1>
+	<h1 class="cover-heading">Leader Board
+		<div class="fb-share-button" data-href="http://54.168.66.247/rank" data-layout="button" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F54.168.66.247%2Frank&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">分享</a></div>
+	</h1>
 	<?php if(count($rank) == 0): ?>
 	<br>
 	<p>There is no user.</p>

@@ -44,7 +44,7 @@ return new \Phalcon\Config([
 	 */
 	'pup' => [
 		'redirect' => [
-			'success' => 'play/go',
+			'success' => 'play',
 			'failure' => 'user/login'    
 		],
 		'resources' => [

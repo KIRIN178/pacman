@@ -20,6 +20,14 @@ class RankController extends \Phalcon\Mvc\Controller
 		$di = Phalcon\DI::getDefault();
 		$user = new User();
 		$this->view->rank = $user->getRankRow();
+		foreach($this->view->rank as $idx=>$row)
+		{
+			if($row["id"] == $this->session->get('')["id"])
+			{
+				$this->view->seq = $idx+1;
+				break;
+			}
+		}
 		if(true === $this->auth->isUserSignedIn())
 		{
 			$this->view->id = $this->session->get('')["id"];

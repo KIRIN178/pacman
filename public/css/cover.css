@@ -348,3 +348,8 @@ tr.shift span {
 hr {
   border-top: 1px solid orange;
 }
+div.fb-share-button {
+	float: right;
+	margin-right: 30px;
+	margin-top: -9px;
+}
