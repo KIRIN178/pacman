@@ -2,7 +2,7 @@
   <?php $this->partial('nav'); ?>
 
   <main role="main" class="inner cover">
-	<h1 class="cover-heading">ログイン</h1>
+	<h1 class="cover-heading">Login</h1>
 	<br />
 	<?php echo $this->tag->form("user/login"); ?>
 		<div class="input-group mb-3">
@@ -19,14 +19,14 @@
 		</div>
 	    <br />
 	  	<p class="text-center">
-			<?php echo $this->tag->submitButton(array("class"=>"btn btn-primary","value"=>"ログイン")); ?>
+			<?php echo $this->tag->submitButton(array("class"=>"btn btn-primary","value"=>"Login")); ?>
 		</p>
 	 <?php if($is_error): ?>
 	  	<div>Error:</div>
 	  	<?=$this->flashSession->output() ?>
 	 <?php endif; ?>
 	  	<p class="text-center">
-	 		<?=$this->tag->linkTo('user/register','≫登録はこちら'); ?>
+	 		<?=$this->tag->linkTo('user/register','≫Signup Here'); ?>
 	  	</p>
 	</form>
   </main>
