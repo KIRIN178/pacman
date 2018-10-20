@@ -3,6 +3,10 @@
 
   <main role="main" class="inner cover">
 	<h1 class="cover-heading">Leader Board</h1>
+	<?php if(count($rank) == 0): ?>
+	<br>
+	<h2>There is no user.</h2>
+	<?php else: ?>
 	<table class="table">
     <thead>
     <tr>
@@ -43,7 +47,7 @@
     
     </tbody>
 	</table>
-	
+	<?php endif; ?>
   </main>
 
   <?php $this->partial('footer'); ?>

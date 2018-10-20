@@ -84,7 +84,7 @@ try {
 			$dispatcher = new Dispatcher();
 			$dispatcher->setEventsManager($eventsManager);
 
-			$dispatcher->setDefaultNamespace('Naruhodo\Controllers');
+			//$dispatcher->setDefaultNamespace('Phalcon\Controllers');
 
 			//in production
 			if($config->application->production)
