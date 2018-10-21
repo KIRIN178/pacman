@@ -58,9 +58,6 @@ When "follow" button is pushed on Ranking page, it will post data to this page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
 ## Login [/user/login]
 
 ### Show Login Form [GET]
@@ -69,18 +66,11 @@ You can login with username and password on this page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
-
 ### Login [POST]
 
 If you login successfully, you will be redirected to Play page. Otherwise it will show error message.
 
 + Response 200 (application/json)
-
-        [
-        ]
 
 ## Logout [/user/signout]
 
@@ -90,9 +80,6 @@ After logout, you will be redirected to Ranking Page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
 ## Play [/play]
 
 ### Play [GET]
@@ -101,9 +88,6 @@ After logout, you will be redirected to Ranking Page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
 ## Profile [/profile]
 
 ### Show Profile [GET]
@@ -111,9 +95,6 @@ After logout, you will be redirected to Ranking Page.
 (Login needed) You can see your personal profile of level and score, team profile of score, following target, and your follower list.
 
 + Response 200 (application/json)
-
-        [
-        ]
 
 ## Ranking [/rank]
 
@@ -125,9 +106,6 @@ Here is the leader board page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
 ## Registration [/user/register]
 
 ### Show Registeration Form [GET]
@@ -136,17 +114,11 @@ You can sign up on this page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
 ### Registration [POST]
 
 If you sign up successfully, you will be redirected to Play page. Otherwise it will show error message.
 
 + Response 200 (application/json)
-
-        [
-        ]
 
 ## Score [/user/score]
 
@@ -156,9 +128,6 @@ When a game ended on Play page, it will post result data to this page.
 
 + Response 200 (application/json)
 
-        [
-        ]
-
 ## Unfollow [/user/unfollow]
 
 ### Unfollow [POST]
@@ -167,5 +136,3 @@ When "unfollow" button is pushed on Ranking page, it will post data to this page
 
 + Response 200 (application/json)
 
-        [
-        ]
