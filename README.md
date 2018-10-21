@@ -1,11 +1,12 @@
 Apiary Link:
-https://pacman1.docs.apiary.io/#reference/0/unfollow
+https://pacman1.docs.apiary.io/
 
 
-FORMAT: 1A
 HOST: http://54.168.66.247/
 
 # pacman
+
+# --Introduction--
 
 # Description
 Pacman, the little yellow character, who chased yellow dots and tried to avoid the Ghosts, was
@@ -46,6 +47,8 @@ Under the sitiuation of Pacman during having "Power Pellet", Ghosts will become 
 
 #SNS Share
 Players can share this game on their facebook with FB share button on Ranking page. 
+
+# --Reference--
 
 ## Follow [/user/follow]
 
