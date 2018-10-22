@@ -11,17 +11,21 @@
 	<hr>
 	<h2>Team Score: <?=number_format($team_score) ?></h2>
 	<?php if(!is_null($following)): ?>
-	<h2>Following: <?=$following ?></h2>
+		<h2>Following: <?=$following ?></h2>
 	<?php endif; ?>
-	<h2>Follower List</h2>
-	<table class="table">
-    <tbody>
-	<?php foreach($follower as $idx=>$person): ?>
-		<tr>
-			<td class="seq"><?=$idx ?></td>
-			<td class="follower"><?=$person ?></td>
-		</tr>
-	<?php endforeach; ?>
+	    <h2>Follower List</h2>
+	<?php if(count($follower) > 0): ?>
+		<table class="table">
+		<tbody>
+		<?php foreach($follower as $idx=>$person): ?>
+			<tr>
+				<td class="seq"><?=$idx ?></td>
+				<td class="follower"><?=$person ?></td>
+			</tr>
+		<?php endforeach; ?>
+	<?php else: ?>
+		<p>(You have no follower)</p>
+	<?php endif; ?>
 	</table>
   </main>
 

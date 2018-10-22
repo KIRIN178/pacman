@@ -89,7 +89,7 @@ class UserController extends \Phalcon\Mvc\Controller
 	public function scoreAction()
 	{
 		$this->view->disable();
-		if($this->request->isPost())
+		if($this->request->isPut())
 		{
 			if(true === $this->auth->isUserSignedIn())
 			{
@@ -105,8 +105,8 @@ class UserController extends \Phalcon\Mvc\Controller
 				{
 					$group_score = $sc->sumatory;
 				}
-				$last_level = $this->request->getPost('level');
-				$last_score = $this->request->getPost('score');
+				$last_level = $this->request->getPut('level');
+				$last_score = $this->request->getPut('score');
 				$userUpdateScore = UserUpdateScore::findFirst($id);
 				$level = $userUpdateScore->getLevel();
 				$score = $userUpdateScore->getScore();

@@ -2167,7 +2167,7 @@ function pacmanDead() {
 		$('main .score-panel').remove();
 		$('.loading').show();
 		$.ajax({
-		  type: "POST",
+		  type: "PUT",
 		  dataType: 'json',
 		  url: "/user/score",
 		  data: {level:level,score:score},
