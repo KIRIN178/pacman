@@ -1,5 +1,5 @@
 var myApp;
-var level = 1;
+var level = 0;
 var life = 0;
 var score = 0;
 var map = Array();
