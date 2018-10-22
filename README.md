@@ -76,9 +76,6 @@ When "follow" button is pushed on Ranking page, it will put data to this page.
 
 + Response 200 (text/html)
 
-        {
-        }
-
 
 ### Login [POST]
 
@@ -105,9 +102,6 @@ After logout, you will be redirected to Ranking Page.
 
 + Response 302
 
-        {
-        }
-
 ## Play [/play]
 
 ### Play [GET]
@@ -116,9 +110,6 @@ After logout, you will be redirected to Ranking Page.
 
 + Response 200 (text/html)
 
-        {
-        }
-
 ## Profile [/profile]
 
 ### Show Profile [GET]
@@ -126,9 +117,6 @@ After logout, you will be redirected to Ranking Page.
 (Login needed) You can see your personal profile of level and score, team profile of score, following target, and your follower list.
 
 + Response 200 (text/html)
-
-        {
-        }
 
 ## Ranking [/rank]
 
@@ -139,9 +127,6 @@ Here is the leader board page.
 (Login needed function) You can follow or unfollow other players.
 
 + Response 200 (text/html)
-
-        {
-        }
 
 ## Ranking List [/rank/get]
 
@@ -176,9 +161,6 @@ You can get ranking list with this api.
 You can sign up on this page.
 
 + Response 200 (text/html)
-
-        [
-        ]
 
 ### Registration [POST]
 
