@@ -13,54 +13,56 @@
 	<h1 class="cover-heading">Leader Board
 		<div class="fb-share-button" data-href="http://54.168.66.247/rank" data-layout="button" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F54.168.66.247%2Frank&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">分享</a></div>
 	</h1>
-	<?php if(count($rank) == 0): ?>
-	<br>
-	<p>There is no user yet.</p>
-	<?php else: ?>
-	<div class="table-responsive">
-		<table class="table">
-		<thead>
-		<tr>
-			<th class="rank">Rank</th>
-			<th class="name">Name</th>
-			<th class="score">Score</th>
-			<th class="level">Level</th>
-			<th class="last">Last Play</th>
-		</tr>
-		</thead>
-		<tbody>
-		<?php foreach($rank as $i=>$row): ?>
-		<tr<?php if($this->auth->isUserSignedIn()){if($row["id"]==$id){echo ' class="text-danger"';}else{echo ' class="shift"';}} ?>>
-			<td class="rank"><span><?=$i+1 ?></span></td>
-			<td class="name">
-				<?=$row["name"] ?>
-				<?php if($this->auth->isUserSignedIn()): ?>
-				<?php if($row["id"]!=$id): ?>
-						<?php if($row["id"]!=$group_id): ?>
-					<?php echo $this->tag->form("user/follow"); ?>
-						<input type="text" name="target_id" class="hidden" value="<?=$row["id"] ?>" />
-						<button type="submit" class="btn btn-primary btn-sm">Follow</button>
-					</form>
-						<?php else: ?>
-					<?php echo $this->tag->form("user/unfollow"); ?>
-						<input type="text" name="target_id" class="hidden" value="<?=$row["id"] ?>" />
-						<button type="submit" class="btn btn-warning btn-sm">Unfollow</button>
-					</form>
-						<?php endif; ?>
-
-				<?php endif; ?><?php endif; ?>
-			</td>
-			<td class="score"><span><?=number_format($row["score"]) ?></span></td>
-			<td class="level"><span><?=number_format($row["level"]) ?></span></td>
-			<td class="last"><span><?=$row["last_datetime"] ?></span></td>
-		</tr>
-		<?php endforeach; ?>
-
-		</tbody>
-		</table>
+	<div class="block_no_user" style="display: none;">
+		<br>
+		<p>There is no user yet.</p>
 	</div>
-	<?php endif; ?>
+	<div class="block_rank"  style="display: none;">
+		<div class="table-responsive">
+			<table class="table">
+			<thead>
+			<tr>
+				<th class="rank">Rank</th>
+				<th class="name">Name</th>
+				<th class="score">Score</th>
+				<th class="level">Level</th>
+				<th class="last">Last Play</th>
+			</tr>
+			</thead>
+			<tbody class="block_tr">
+
+			</tbody>
+			</table>
+		</div>
+	</div>
   </main>
 
   <?php $this->partial('footer'); ?>
+</div>
+<div class="text_tr hidden">
+	<table>
+		<tr> 
+			<td class="rank"><span></span></td>
+			<td class="name"><span></span></td>
+			<td class="score"><span></span></td>
+			<td class="level"><span></span></td>
+			<td class="last"><span></span></td>
+		</tr>
+	</table>
+</div>
+<div class="text_follow hidden">
+	<?php echo $this->tag->form("user/follow"); ?>
+		<input type="text" name="target_id" class="hidden" value="" />
+	</form>
+</div>
+<div class="text_follow_btn hidden">
+	<button type="button" class="btn btn-primary btn-sm btn-follow">Follow</button>
+</div>
+<div class="text_unfollow hidden">
+	<?php echo $this->tag->form("user/unfollow"); ?>
+		<input type="text" name="target_id" class="hidden" value="" />
+	</form>
+</div>
+<div class="text_unfollow_btn hidden">
+	<button type="button" class="btn btn-success btn-sm btn-follow">UnFollow</button>
 </div>

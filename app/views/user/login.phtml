@@ -4,32 +4,35 @@
   <main role="main" class="inner cover">
 	<h1 class="cover-heading">Login</h1>
 	<br />
-	<?php echo $this->tag->form("user/login"); ?>
+	<?php echo $this->tag->form(array("action"=>"/user/login","id"=>"form")); ?>
 		<div class="input-group mb-3">
 		  <div class="input-group-prepend">
 			<span class="input-group-text" id="inputGroup-sizing-default">E-mail</span>
 		  </div>
-		  <?php echo $this->tag->emailField(array("name"=>"email","id"=>"email","class"=>"form-control","value"=>$this->request->getPost('email'))); ?>
+		  <?php echo $this->tag->emailField(array("name"=>"email","id"=>"email","class"=>"form-control","value"=>$this->request->getPost('email'),"required"=>"required")); ?>
 		</div>
 	    <div class="input-group mb-3">
 		  <div class="input-group-prepend">
 			<span class="input-group-text" id="inputGroup-sizing-default">Password</span>
 		  </div>
-		  <?php echo $this->tag->passwordField(array("type"=>"password","name"=>"password","id"=>"password","class"=>"form-control","value"=>$this->request->getPost('password'))); ?>
+		  <?php echo $this->tag->passwordField(array("type"=>"password","name"=>"password","id"=>"password","class"=>"form-control","value"=>$this->request->getPost('password'),"required"=>"required")); ?>
 		</div>
+	  	<input type="submit" class="hidden" />
+	</form>
 	    <br />
 	  	<p class="text-center">
-			<?php echo $this->tag->submitButton(array("class"=>"btn btn-primary","value"=>"Login")); ?>
+			<button id="submit" class="btn btn-primary" >Login</button>
 		</p>
-	 <?php if($is_error): ?>
-	  	<div>Error:</div>
-	  	<?=$this->flashSession->output() ?>
-	 <?php endif; ?>
+	 	<div class="block_error" style="display: none;">
+			<div>Error:</div>
+			<div class="content"></div>
+	 	</div>
 	  	<p class="text-center">
 	 		<?=$this->tag->linkTo('user/register','≫Signup Here'); ?>
 	  	</p>
-	</form>
+	
   </main>
 
   <?php $this->partial('footer'); ?>
 </div>
+<div class="text_msg hidden"><div class="msg"></div></div>

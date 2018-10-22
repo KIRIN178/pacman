@@ -32,13 +32,15 @@ class Auth extends Component
         $user = User::findFirstByEmail(strtolower($credentials['email']));
         if ($user == false) {
             $this->registerUserThrottling(null);
-			$this->flashSession->error("Wrong email/password combination");
+			//$this->flashSession->error("Wrong email/password combination");
+			return false;
             throw new Exception('Wrong email/password combination');
         }
 
         if (!$this->security->checkHash($credentials['password'], $user->getPassword())) {
             $this->registerUserThrottling($user->getId());
-			$this->flashSession->error("Wrong email/password combination");
+			//$this->flashSession->error("Wrong email/password combination");
+			return false;
             throw new Exception('Wrong email/password combination');
         }
 
@@ -50,6 +52,7 @@ class Auth extends Component
         }
 
         $this->setIdentity($user);
+		return true;
     }
 
     /**
@@ -87,24 +90,33 @@ class Auth extends Component
                 return $this->loginWithRememberMe();
             }
         } else {
+			$ret["msg"] = array();
             if ($form->isValid($this->request->getPost()) == false) {
                 foreach ($form->getMessages() as $message) {
-                    $this->flashSession->error($message->getMessage());
+                    //$this->flashSession->error($message->getMessage());
+					$ret["msg"][] = $message->getMessage();
                 }
             } else {
-                $this->check(array(
+                $is_ckeck = $this->check(array(
                     'email' => $this->request->getPost('email'),
                     'password' => $this->request->getPost('password'),
                     'remember' => $this->request->getPost('remember'),
                 ));
-
+				if($is_ckeck)
+					$ret["status"] = 'ok';
+				else
+				{
+					$ret["status"] = 'error';
+					$ret["msg"][] = 'Wrong email/password combination';
+				}
+				return $ret;
                 $pupRedirect = $this->getDI()->get('config')->pup->redirect;
 
                 return $this->response->redirect($pupRedirect->success);
             }
         }
-
-        return false;
+		$ret["status"] = 'error';
+        return $ret;
     }
 
     /**

@@ -24,7 +24,7 @@ class UserController extends \Phalcon\Mvc\Controller
         $this->assets->addCss('css/bootstrap.min.css');
 		$this->assets->addCss('css/cover.css');
 		// And some local JavaScript resources
-        $this->assets->addJs('//code.jquery.com/jquery-3.3.1.slim.min.js', false);
+        $this->assets->addJs('//code.jquery.com/jquery-3.3.1.min.js', false);
         $this->assets->addJs('js/bootstrap.min.js');
 		$this->view->nav = 'user';
 	}
@@ -36,31 +36,55 @@ class UserController extends \Phalcon\Mvc\Controller
     }
 	public function followAction()
 	{
-		if($this->request->isPost())
+		$this->view->disable();
+		if(false === $this->auth->isUserSignedIn())
 		{
-			if(true === $this->auth->isUserSignedIn())
-			{
-				$target_id = $this->request->getPost('target_id');
-				$user = User::findfirst($this->session->get('')["id"]);
-				$user->setGroupId($target_id);
-				$user->update();		
-			}
+			$ret["status"] = 'error';
+			$ret["msg"] = 'You must login first.';
+			echo json_encode($ret);
+			return;
 		}
-		$this->response->redirect('/rank');
+		if($this->request->isPut())
+		{
+			$target_id = $this->request->getPut('target_id');
+			$user = User::findfirst($this->session->get('')["id"]);
+			$user->setGroupId($target_id);
+			$user->update();
+			$ret["status"] = 'ok';
+			echo json_encode($ret);
+		}
+		else
+		{
+			$ret["status"] = 'error';
+			$ret["msg"] = 'There is something wrong.';
+			echo json_encode($ret);
+		}
 	}
 	public function unfollowAction()
 	{
-		if($this->request->isPost())
+		$this->view->disable();
+		if(false === $this->auth->isUserSignedIn())
 		{
-			if(true === $this->auth->isUserSignedIn())
-			{
-				$target_id = $this->request->getPost('target_id');
-				$user = User::findfirst($this->session->get('')["id"]);
-				$user->setGroupId(0);
-				$user->update();
-			}
+			$ret["status"] = 'error';
+			$ret["msg"] = 'You must login first.';
+			echo json_encode($ret);
+			return;
 		}
-		$this->response->redirect('/rank');
+		if($this->request->isPut())
+		{
+			$target_id = $this->request->getPut('target_id');
+			$user = User::findfirst($this->session->get('')["id"]);
+			$user->setGroupId(0);
+			$user->update();
+			$ret["status"] = 'ok';
+			echo json_encode($ret);
+		}
+		else
+		{
+			$ret["status"] = 'error';
+			$ret["msg"] = 'There is something wrong.';
+			echo json_encode($ret);
+		}
 	}
 	public function scoreAction()
 	{
@@ -132,28 +156,31 @@ class UserController extends \Phalcon\Mvc\Controller
      */
     public function loginAction()
     {
-        
-
-        $form = new LoginForm();
-
-        try {
-            $this->auth->login($form);
-        } catch (AuthException $e) {
-            $this->flash->error($e->getMessage());
-        }
-
-        $this->view->form = $form;
 		if(true === $this->auth->isUserSignedIn())
         	$this->response->redirect('play');
 		else
 		{
 			if($this->request->isPost())
-			{
-				$this->view->is_error = true;
+			{	
+				$this->view->disable();
+				$form = new LoginForm();
+				try {
+					$is_login = $this->auth->login($form);
+				} catch (AuthException $e) {
+					$this->flash->error($e->getMessage());
+				}
+				if($is_login["status"] == 'ok')
+					$ret["status"] = 'ok';
+				else
+				{
+					$ret["status"] = 'error';
+					$ret["msg"] = $is_login["msg"];
+				}
+				echo json_encode($ret);
 			}
 			else
 			{
-				$this->view->is_error = false;
+				$this->assets->addJs('js/login.js');
 			}
 		}
 		
@@ -162,7 +189,7 @@ class UserController extends \Phalcon\Mvc\Controller
     /**
      * Login with Facebook account
      */
-    public function loginWithFacebookAction()
+    /*public function loginWithFacebookAction()
     {
         try {
             $this->view->disable();
@@ -170,12 +197,12 @@ class UserController extends \Phalcon\Mvc\Controller
         } catch(AuthException $e) {
             $this->flash->error('There was an error connectiong to Facebook.');
         }
-    }
+    }*/
 
     /**
      * Login with LinkedIn account
      */
-    public function loginWithLinkedInAction()
+    /*public function loginWithLinkedInAction()
     {
         try {
             $this->view->disable();
@@ -183,12 +210,12 @@ class UserController extends \Phalcon\Mvc\Controller
         } catch(AuthException $e) {
             $this->flash->error('There was an error connectiong to LinkedIn.');
         }
-    }
+    }*/
 
     /**
      * Login with Twitter account
      */
-    public function loginWithTwitterAction()
+    /*public function loginWithTwitterAction()
     {
         try {
             $this->view->disable();
@@ -196,12 +223,12 @@ class UserController extends \Phalcon\Mvc\Controller
         } catch(AuthException $e) {
             $this->flash->error('There was an error connectiong to Twitter.');
         }
-    }
+    }*/
 
     /**
      * Login with Google account
      */
-    public function loginWithGoogleAction()
+    /*public function loginWithGoogleAction()
     {
         try {
             $this->view->disable();
@@ -209,7 +236,7 @@ class UserController extends \Phalcon\Mvc\Controller
         } catch(AuthException $e) {
             $this->flash->error('There was an error connectiong to Google.');
         }
-    }
+    }*/
 
     /**
      * Logout user and clear the data from session
@@ -227,13 +254,19 @@ class UserController extends \Phalcon\Mvc\Controller
      */
     public function registerAction()
     {
+		if(true === $this->auth->isUserSignedIn())
+        	$this->response->redirect('play');
         $form = new RegisterForm();
 
         if ($this->request->isPost()) {
+			$this->view->disable();
             if (!$form->isValid($this->request->getPost())) {
+				$ret["status"] = 'error';
+				$ret["msg"] = array();
                 foreach($form->getMessages() as $message) {
-                    $this->flash->error($message->getMessage());
-					$this->flashSession->error($message->getMessage());
+					$ret["msg"][] = $message->getMessage();
+                    //$this->flash->error($message->getMessage());
+					//$this->flashSession->error($message->getMessage());
                 }
 				$this->view->is_error = true;
             } else {
@@ -248,9 +281,11 @@ class UserController extends \Phalcon\Mvc\Controller
                 ));
 
                 if (!$user->save()) {
+					$ret["status"] = 'error';
                     foreach($user->getMessages() as $message) {
-                        $this->flash->error($message->getMessage());
-						$this->flashSession->error($message->getMessage());
+						$ret["msg"][] = $message->getMessage();
+                        //$this->flash->error($message->getMessage());
+						//$this->flashSession->error($message->getMessage());
                     }
 					$this->view->is_error = true;
                 } else {
@@ -261,6 +296,7 @@ class UserController extends \Phalcon\Mvc\Controller
 					} catch (AuthException $e) {
 						$this->flash->error($e->getMessage());
 					}
+					$ret["status"] = 'ok';
 					//echo strtolower($this->request->getPost('email'));
 					//$user = User::findFirstByEmail(strtolower($this->request->getPost('email')));
 					//$this->auth->saveSuccessLogin($user);
@@ -269,16 +305,17 @@ class UserController extends \Phalcon\Mvc\Controller
 					//$this->response->redirect('play');
                 }
             }
+			echo json_encode($ret);
         }
 		else {
-			$this->view->is_error = false;
+			$this->assets->addJs('js/login.js');
 		}
     }
 
     /**
      * Shows the forgot password form
      */
-    public function forgotPasswordAction()
+    /*public function forgotPasswordAction()
     {
         $form = new ForgotPasswordForm();
 
@@ -321,12 +358,12 @@ class UserController extends \Phalcon\Mvc\Controller
         }
 
         $this->view->form = $form;
-    }
+    }*/
 
     /**
      * Reset pasword
      */
-    public function resetPasswordAction($code, $email)
+    /*public function resetPasswordAction($code, $email)
     {
         $resetPassword = UserResetPasswords::findFirstByCode($code);
 
@@ -345,12 +382,12 @@ class UserController extends \Phalcon\Mvc\Controller
             ));
         }
 
-        $resetPassword->setReset(1);
+        $resetPassword->setReset(1);*/
 
         /**
          * Change the confirmation to 'reset'
          */
-        if (!$resetPassword->save()) {
+        /*if (!$resetPassword->save()) {
 
             foreach ($resetPassword->getMessages() as $message) {
                 $this->flash->error($message);
@@ -360,12 +397,12 @@ class UserController extends \Phalcon\Mvc\Controller
                 'controller' => 'index',
                 'action' => 'index'
             ));
-        }
+        }*/
 
         /**
          * Identity the user in the application
          */
-        $this->auth->authUserById($resetPassword->getUserId());
+       /* $this->auth->authUserById($resetPassword->getUserId());
 
         $this->flash->success('Please reset your password');
 
@@ -374,13 +411,13 @@ class UserController extends \Phalcon\Mvc\Controller
             'action' => 'changePassword'
         ));
 
-    }
+    }*/
 
     /**
      * Users must use this action to change its password
      *
      */
-    public function changePasswordAction()
+    /*public function changePasswordAction()
     {
         $form = new ChangePasswordForm();
 
@@ -412,12 +449,12 @@ class UserController extends \Phalcon\Mvc\Controller
         }
 
         $this->view->form = $form;
-    }
+    }*/
 
     /**
      * Confirms an e-mail, if the user must change its password then changes it
      */
-    public function confirmEmailAction($code, $email)
+    /*public function confirmEmailAction($code, $email)
     {
         $confirmation = UserEmailConfirmations::findFirstByCode($code);
 
@@ -463,6 +500,6 @@ class UserController extends \Phalcon\Mvc\Controller
         $this->flash->success('The email was successfully confirmed');
 
         return $this->response->redirect($this->_activeLanguage.'/user/profile');
-    }
+    }*/
 }
 

@@ -1012,12 +1012,6 @@ class User extends \Phalcon\Mvc\Model
 			$ret[] = $temp;
 		}
 		return $ret;
-		$modelsManager = $di->getModelsManager();
-		//$di = Phalcon\DI::getDefault();
-		$rank = $modelsManager->createQuery('SELECT user.* FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id WHERE user.id=17')->execute();;
-		
-		echo 'aaa';
-		return null;
 	}
 	public function getTeamScore($id)
 	{
