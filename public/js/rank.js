@@ -68,7 +68,7 @@ function initList() {
 		  }
 	  },
 	  error: function(XMLHttpRequest, textStatus, errorThrown) {
-		  //location.reload(); 
+		  location.reload(); 
 	  }
 	});
 }
