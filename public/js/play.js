@@ -1,5 +1,5 @@
 var myApp;
-var level = 0;
+var level = 1;
 var life = 0;
 var score = 0;
 var map = Array();
@@ -8,7 +8,7 @@ var ghost = Array();
 var g_seq = 0;
 var status = 0;
 var command = Array();	//'u':up,'r':right,'d':down,'l':left
-var pac_speed = 800;	//800
+var pac_speed = 600;	//800
 var ghost_speed = 2000;
 var ghost_score = 200;
 var arr_timer = Array();
@@ -20,8 +20,8 @@ $( document ).ready(function() {
 })
 function addLife() {
 	life++;
-	if(life > 3)
-		life = 3;
+	//if(life > 3)
+		//life = 3;
 	$('main .life').text(life);
 }
 function checkGetBonusLife() {
@@ -2274,7 +2274,7 @@ function prepareMap() {
 	$('.map-template').children('div').each(function(idx,ele){
 		$(ele).attr('class','g'+map[level%10][idx]);
 	})
-	ghost_speed = ghost_speed - 10*level;
+	ghost_speed = ghost_speed - 100*level;
 	if(ghost_speed <= 200)
 		ghost_speed == 200;
 	$('.map-template').children('img').insertBefore($('.map-template').children('div.g0'));
