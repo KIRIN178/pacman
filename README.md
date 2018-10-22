@@ -52,25 +52,50 @@ Players can share this game on their facebook with FB share button on Ranking pa
 
 ## Follow [/user/follow]
 
-### Follow [POST]
+### Follow [PUT]
 
-When "follow" button is pushed on Ranking page, it will post data to this page.
+When "follow" button is pushed on Ranking page, it will put data to this page.
+
++ Request (application/json)
+
+        {
+            "target_id": target_id,
+        }
 
 + Response 200 (application/json)
+
+        {
+                "status": "ok"
+        }
 
 ## Login [/user/login]
 
 ### Show Login Form [GET]
 
-You can login with username and password on this page.
+(Login needed) You can login with username and password on this page.
 
-+ Response 200 (application/json)
++ Response 200 (text/html)
+
+        {
+        }
+
 
 ### Login [POST]
 
 If you login successfully, you will be redirected to Play page. Otherwise it will show error message.
 
++ Request (application/json)
+
+        {
+            "email": "your_email@test.com",
+            "password": "your_password",
+        }
+
 + Response 200 (application/json)
+
+        {
+                "status": "ok"
+        }
 
 ## Logout [/user/signout]
 
@@ -78,7 +103,10 @@ If you login successfully, you will be redirected to Play page. Otherwise it wil
 
 After logout, you will be redirected to Ranking Page.
 
-+ Response 200 (application/json)
++ Response 302
+
+        {
+        }
 
 ## Play [/play]
 
@@ -86,7 +114,10 @@ After logout, you will be redirected to Ranking Page.
 
 (Login needed) You can play Pacman game on this page.
 
-+ Response 200 (application/json)
++ Response 200 (text/html)
+
+        {
+        }
 
 ## Profile [/profile]
 
@@ -94,7 +125,10 @@ After logout, you will be redirected to Ranking Page.
 
 (Login needed) You can see your personal profile of level and score, team profile of score, following target, and your follower list.
 
-+ Response 200 (application/json)
++ Response 200 (text/html)
+
+        {
+        }
 
 ## Ranking [/rank]
 
@@ -104,7 +138,36 @@ Here is the leader board page.
 (Login needed function) Your name will become red.
 (Login needed function) You can follow or unfollow other players.
 
++ Response 200 (text/html)
+
+        {
+        }
+
+## Ranking List [/rank/get]
+
+### Get Ranking List
+
+You can get ranking list with this api.
+
 + Response 200 (application/json)
+
+        {
+            "is_login": true,
+            "rank": [
+                {
+                    "id": 20,
+                    "name": user1,
+                    "level": 31,
+                    "last_datetime": "2018-10-20 06:50:23"
+                },
+                {
+                    "id": 21,
+                    "name": user2,
+                    "level": 20,
+                    "last_datetime": "2018-10-22 11:46:00"
+                }
+            ]
+        }
 
 ## Registration [/user/register]
 
@@ -112,27 +175,66 @@ Here is the leader board page.
 
 You can sign up on this page.
 
-+ Response 200 (application/json)
++ Response 200 (text/html)
+
+        [
+        ]
 
 ### Registration [POST]
 
 If you sign up successfully, you will be redirected to Play page. Otherwise it will show error message.
 
++ Request (application/json)
+
+        {
+            "email": "your_email@test.com",
+            "password": "your_password",
+            "confirmPassword": "your_password",
+        }
+
 + Response 200 (application/json)
+
+        {
+                "status": "ok"
+        }
 
 ## Score [/user/score]
 
-### Score [POST]
+### Score [PUT]
 
 When a game ended on Play page, it will post result data to this page.
 
++ Request (application/json)
+
+        {
+            "level": 20,
+            "score": 600,
+        }
+
 + Response 200 (application/json)
+
+        {
+            "status": "ok",
+            "level": 20,
+            "score": 600,
+            "teamScore": 1330
+        }
 
 ## Unfollow [/user/unfollow]
 
-### Unfollow [POST]
+### Unfollow [PUT]
 
-When "unfollow" button is pushed on Ranking page, it will post data to this page.
+(Login needed) When "unfollow" button is pushed on Ranking page, it will put data to this page.
+
++ Request (application/json)
+
+        {
+            "target_id": target_id,
+        }
 
 + Response 200 (application/json)
+
+        {
+                "status": "ok"
+        }
 
