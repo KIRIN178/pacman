@@ -8,10 +8,11 @@ var ghost = Array();
 var g_seq = 0;
 var status = 0;
 var command = Array();	//'u':up,'r':right,'d':down,'l':left
-var pac_speed = 350;	//800
+var pac_speed = 200;	//800
 var ghost_speed = 2000;
 var ghost_score = 200;
 var arr_timer = Array();
+var arr_timer_ghost = Array();
 var is_over_ten_thousand = false;
 $( document ).ready(function() {
 	initSetting();
@@ -32,11 +33,14 @@ function checkGetBonusLife() {
 	}
 }
 function ghostDead(seq) {
+	if($('main .seq-'+seq).length == 0)
+		return;
+	$('main .seq-'+seq).remove();
 	score += ghost_score;
+	$('main .score').text(numberWithCommas(score));
 	checkGetBonusLife();
 	ghost_score *= 2;
 	ghost[seq] = Array();
-	$('main .seq-'+seq).remove();
 	arr_timer.push(setTimeout(function(){_ghostGenerate();},5000));
 }
 function ghostMove(obj, seq) {
@@ -2265,10 +2269,11 @@ function pacmanMove() {
 	}
 }
 function pacmanWeaken() {
+	status = 2;
 	$('main .sprite-ghost').each(function(idx,ele){
 		$(ele).addClass('blink_me');
 	})
-	arr_timer.push(setTimeout(function(){pacmanBecomeNormal()},5000))
+	arr_timer_ghost.push(setTimeout(function(){pacmanBecomeNormal()},5000))
 }
 function prepareMap() {
 	$('.map-template').children('div').each(function(idx,ele){
@@ -2349,8 +2354,12 @@ function _ghostInsert(obj) {
 	g_seq++;
 	$(obj_ghost).insertBefore(obj);
 	$(obj_ghost).addClass('seq-'+seq);
-	if(status == 1)
+	if(status != 0)
+	{
 		$(obj_ghost).attr('src',$(obj_ghost).attr('src').replace('-y','-x'));
+		if(status == 2)
+			$(obj_ghost).addClass('blink_me');
+	}
 	ghostMove(obj_ghost,seq);
 }
 function _ghostGenerate() {
@@ -2817,6 +2826,9 @@ function _pacMoveDealEndGame() {
 		$(arr_timer).each(function(idx,ele){
 			clearTimeout(ele);
 		})
+		$(arr_timer_ghost).each(function(idx,ele){
+			clearTimeout(ele);
+		})
 		command = Array();
 		level++;
 		status = 0;
@@ -2843,7 +2855,10 @@ function _pacMoveDealObject() {
 		$('main .sprite-pacman').css('z-index','300');
 		if($('main .sprite-ghost').length > 0)
 			$('main .sprite-ghost').attr('src',$('main .sprite-ghost').attr('src').replace('-y','-x'));
-		arr_timer.push(setTimeout(function(){pacmanWeaken()},10000))
+		$(arr_timer_ghost).each(function(idx,ele){
+			clearTimeout(ele);
+		})
+		arr_timer_ghost.push(setTimeout(function(){pacmanWeaken()},10000))
 	}
 }
 function _pacMoveUpdatePosition(num) {
