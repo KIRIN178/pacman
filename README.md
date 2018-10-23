@@ -42,7 +42,7 @@ The map concept and ghost concept are as the pics and they are designed for a ci
 
 There are four graves on one map, which are the Ghosts' spawn & respawn points. 
 
-The number of Ghost on one map are decided by level. The maximun number on one map is the floor of the level devided by 10 (There is at least one Ghost on one map). Ex. there are maximun 3 Ghosts on map of 30~39 level. Before a Ghost spawns at a grave, it will take 5 seconds and will show the left time on the grave.
+The number of Ghost on one map are decided by level. The maximun number on one map is the floor of the level devided by 10 plus 2 (There is at least three Ghosts on one map). Ex. there are maximun 6 Ghosts on map of 30~39 level. Before a Ghost spawns at a grave, it will take 5 seconds and will show the left time on the grave.
 
 ![title](https://i.imgur.com/kOpGaIq.jpg)
 
