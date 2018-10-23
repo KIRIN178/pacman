@@ -36,9 +36,15 @@ logic need to be think and create in the server side reflecting on the leaderboa
 # Game Maps
 There are ten maps in this game. They appear with the increasing levels and go cycles every ten levels. 
 
+The map concept and ghost concept are as the pics and they are designed for a circle of 10-level just like the concept of classic Super Mario, ie. the 1-1 ~ 1-8 to 8-1 ~ 8-8.
+
+![title](https://i.imgur.com/Bo01qK4.jpg)
+
 There are four graves on one map, which are the Ghosts' spawn & respawn points. 
 
 The number of Ghost on one map are decided by level. The maximun number on one map is the floor of the level devided by 10 (There is at least one Ghost on one map). Ex. there are maximun 3 Ghosts on map of 30~39 level. Before a Ghost spawns at a grave, it will take 5 seconds and will show the left time on the grave.
+
+![title](https://i.imgur.com/kOpGaIq.jpg)
 
 # Game AI
 The basic Ghosts's attemption is that when they are given birth from graves or meet a intersection, they will try to look for Pacman from their position with horizon line and verticle line. ie, from the ghost's position and see if Pacman is visible on left, up, right, and left ways. If they can see Pacman on the line, they will head for the way which is the way toward Pacman until they meet another intersection. If they can't see Pacman on the four ways, they will decide a random way to go forward until they meet next intersection.
