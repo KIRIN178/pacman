@@ -8,7 +8,7 @@ var ghost = Array();
 var g_seq = 0;
 var status = 0;
 var command = Array();	//'u':up,'r':right,'d':down,'l':left
-var pac_speed = 600;	//800
+var pac_speed = 350;	//800
 var ghost_speed = 2000;
 var ghost_score = 200;
 var arr_timer = Array();
@@ -2354,9 +2354,9 @@ function _ghostInsert(obj) {
 	ghostMove(obj_ghost,seq);
 }
 function _ghostGenerate() {
-	var num = Math.floor(level/10);
-	if(num < 1)
-		num = 1;
+	var num = 2 + Math.floor(level/10);
+	if(num < 3)
+		num = 3;
 	var ghost = (4-$('main .game-panel').children('div.g3').length) + $('main .sprite-ghost').length;
 	if(ghost >= num)
 		return;
