@@ -52,7 +52,8 @@ function initList() {
 				  }
 				  $(obj).children('.rank').children('span').text(idx+1);
 				  $(obj).children('.name').children('span').text(ele["name"]);
-				  $(obj).children('.score').children('span').text(numberWithCommas(ele["score"]));
+				  $(obj).children('.team').children('span').text(numberWithCommas(ele["team_score"]));
+				  $(obj).children('.person').children('span').text(numberWithCommas(ele["score"]));
 				  $(obj).children('.level').children('span').text(numberWithCommas(ele["level"]));
 				  $(obj).children('.last').children('span').text(ele["last_datetime"]);
 				  $(obj).appendTo('.block_tr');
