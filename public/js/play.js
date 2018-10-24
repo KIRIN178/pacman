@@ -2299,6 +2299,7 @@ function restartMap() {
 	$('main .sprite-pacman').remove();
 	$('.source-pacman').children('.sprite-pacman').clone().insertBefore($('main .game-panel').children('div.start'));
 	pac_position = $('main .game-panel').children('div.start').index()-1;
+	ghost_score = 200;
 	_ghostGenerate();
 }
 function _calc_position(way,position)
