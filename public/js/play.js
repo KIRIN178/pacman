@@ -2213,28 +2213,28 @@ function pacmanMove() {
 			if($('main .game-panel').children('div').eq(pac_position-31).attr('class') != 'g4')
 				command.shift();
 			else
-				command.pop();
+			{}
 		}
 		else if(command[1] == 'r')
 		{
 			if($('main .game-panel').children('div').eq(pac_position+1).attr('class') != 'g4')
 				command.shift();
 			else
-				command.pop();
+			{}
 		}
 		else if(command[1] == 'd')
 		{
 			if($('main .game-panel').children('div').eq(pac_position+31).attr('class') != 'g4')
 				command.shift();
 			else
-				command.pop();
+			{}
 		}
 		else if(command[1] == 'l')
 		{
 			if($('main .game-panel').children('div').eq(pac_position-1).attr('class') != 'g4')
 				command.shift();
 			else
-				command.pop();
+			{}
 		}
 	}
 	if(command[0] == 'u')
@@ -2300,6 +2300,10 @@ function restartMap() {
 	$('.source-pacman').children('.sprite-pacman').clone().insertBefore($('main .game-panel').children('div.start'));
 	pac_position = $('main .game-panel').children('div.start').index()-1;
 	_ghostGenerate();
+}
+function _calc_position(way,position)
+{
+	
 }
 function _dealMove(way) {
 	if(command.length == 0)
@@ -2854,7 +2858,7 @@ function _pacMoveDealObject() {
 		$('main .game-panel').children('div').eq(pac_position).attr('class','g0');
 		$('main .sprite-pacman').css('z-index','300');
 		if($('main .sprite-ghost').length > 0)
-			$('main .sprite-ghost').attr('src',$('main .sprite-ghost').attr('src').replace('-y','-x'));
+			$('main .sprite-ghost').attr('src',$('main .sprite-ghost').attr('src').replace('-y','-x')).removeClass('blink_me');
 		$(arr_timer_ghost).each(function(idx,ele){
 			clearTimeout(ele);
 		})
