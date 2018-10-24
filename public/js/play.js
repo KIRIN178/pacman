@@ -8,7 +8,7 @@ var ghost = Array();
 var g_seq = 0;
 var status = 0;
 var command = Array();	//'u':up,'r':right,'d':down,'l':left
-var pac_speed = 200;	//800
+var pac_speed = 200;	//200
 var ghost_speed = 2000;
 var ghost_score = 200;
 var arr_timer = Array();
@@ -2278,10 +2278,11 @@ function pacmanWeaken() {
 function prepareMap() {
 	$('.map-template').children('div').each(function(idx,ele){
 		$(ele).attr('class','g'+map[level%10][idx]);
+		//$(ele).attr('class','g'+map[0][idx]);
 	})
-	ghost_speed = ghost_speed - 100*level;
+	ghost_speed = ghost_speed - 100;
 	if(ghost_speed <= 200)
-		ghost_speed == 200;
+		ghost_speed = 150;
 	$('.map-template').children('img').insertBefore($('.map-template').children('div.g0'));
 	$('.map-template').children('div.g0').addClass('start');
 	pac_position = $('.map-template').children('div.g0').index()-1;
@@ -2300,6 +2301,8 @@ function restartMap() {
 	$('.source-pacman').children('.sprite-pacman').clone().insertBefore($('main .game-panel').children('div.start'));
 	pac_position = $('main .game-panel').children('div.start').index()-1;
 	ghost_score = 200;
+	g_seq = 0;
+	ghost = Array();
 	_ghostGenerate();
 }
 function _calc_position(way,position)
@@ -2725,6 +2728,8 @@ function _ghostMoveFindDiversion(seq, way){
 	return times;
 }
 function _ghostMoveUpdatePosition(obj, seq, num) {
+	if($(ghost).length == 0)
+		return;
 	if($(ghost[seq]["position"]).length == 0)
 		return;
 	ghost[seq]["position"] += num;
@@ -2834,13 +2839,13 @@ function _pacMoveDealEndGame() {
 		$(arr_timer_ghost).each(function(idx,ele){
 			clearTimeout(ele);
 		})
+		ghost = Array();
 		command = Array();
 		level++;
 		status = 0;
 		ghost_score = 200;
 		addLife();
 		$('main .level').text(numberWithCommas(level));
-		ghost = Array();
 		g_seq = 0;
 		prepareMap();
 	}
