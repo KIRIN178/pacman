@@ -149,13 +149,19 @@ You can get ranking list with this api.
                     "id": 20,
                     "name": user1,
                     "level": 31,
-                    "last_datetime": "2018-10-20 06:50:23"
+                    "last_datetime": "2018-10-20 06:50:23",
+                    "score": 1500,
+                    "team_score": 2500,
+                    "follower": 1
                 },
                 {
                     "id": 21,
                     "name": user2,
                     "level": 20,
-                    "last_datetime": "2018-10-22 11:46:00"
+                    "last_datetime": "2018-10-22 11:46:00",
+                    "score": 1000,
+                    "team_score": 1000,
+                    "follower": 0
                 }
             ]
         }
