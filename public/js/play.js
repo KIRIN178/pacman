@@ -39,7 +39,7 @@ function ghostDead(seq) {
 	score += ghost_score;
 	$('main .score').text(numberWithCommas(score));
 	checkGetBonusLife();
-	ghost_score *= 2;
+	ghost_score += 200;
 	ghost[seq] = Array();
 	arr_timer.push(setTimeout(function(){_ghostGenerate();},5000));
 }
