@@ -993,7 +993,7 @@ class User extends \Phalcon\Mvc\Model
 	}
 	public function getRankRow()
 	{
-		$sql = 'SELECT user.id,user.email,user.level,user.last_datetime,user.score+(CASE WHEN A.score IS NULL THEN 0 ELSE A.score END) AS score FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id';
+		$sql = 'SELECT user.id,user.email,user.level,user.last_datetime,user.score+(CASE WHEN A.score IS NULL THEN 0 ELSE A.score END) AS score FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id ORDER BY score DESC';
 		$user = new User();
 		$query = new Resultset(
             null,
