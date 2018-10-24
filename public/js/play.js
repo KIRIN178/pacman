@@ -9,7 +9,7 @@ var g_seq = 0;
 var status = 0;
 var command = Array();	//'u':up,'r':right,'d':down,'l':left
 var pac_speed = 200;	//200
-var ghost_speed = 2000;
+var ghost_speed = 2000;	//2000
 var ghost_score = 200;
 var arr_timer = Array();
 var arr_timer_ghost = Array();
@@ -2317,12 +2317,16 @@ function _dealMove(way) {
 	}
 	else if(command.length == 1)
 	{
-		command.push(way);
+		if(command[0] != way)
+			command.push(way);
 	}
 	else
 	{
-		command.pop();
-		command.push(way);
+		if(command[0] != way)
+		{
+			command.pop();
+			command.push(way);
+		}
 	}
 }
 function _ghostDealGrave(obj) {
