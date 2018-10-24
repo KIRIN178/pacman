@@ -993,7 +993,7 @@ class User extends \Phalcon\Mvc\Model
 	}
 	public function getRankRow()
 	{
-		$sql = 'SELECT user.id,user.email,user.level,user.last_datetime,user.score+(CASE WHEN A.score IS NULL THEN 0 ELSE A.score END) AS score FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id ORDER BY score DESC';
+		$sql = 'SELECT user.id,user.email,user.level,user.last_datetime,user.score+(CASE WHEN A.score IS NULL THEN 0 ELSE A.score END) AS team_score,user.score FROM user LEFT JOIN (SELECT group_id,SUM(score) AS score FROM user GROUP BY group_id) A ON A.group_id=user.id ORDER BY team_score DESC, score DESC, level DESC';
 		$user = new User();
 		$query = new Resultset(
             null,
@@ -1009,6 +1009,12 @@ class User extends \Phalcon\Mvc\Model
 			$temp["level"] = $row->level;
 			$temp["last_datetime"] = $row->last_datetime;
 			$temp["score"] = $row->score;
+			$temp["team_score"] = $row->team_score;
+			$follow = User::find([
+					'conditions' => 'group_id='.$temp["id"]
+				]
+			);
+			$temp["follower"] = count($follow);
 			$ret[] = $temp;
 		}
 		return $ret;

@@ -307,29 +307,35 @@ tbody {
     max-height: 860px;
     overflow-y: auto;
 }
-
+.table thead th {
+	height: 74px;
+}
 thead {
     /* fallback */
 }
 
 td.rank, th.rank {
-	width: 77px;
+	width: 50px;
 	text-align: center;
 }
 td.name, th.name {
-	width: 130px;
+	width: 112px;
 	text-align: left;
 }
 td.score, th.score {
-	width: 109px;
+	width: 68px;
 	text-align: center;
 }
 td.level, th.level {
-	width: 77px;
+	width: 50px;
+	text-align: center;
+}
+td.follow, th.follow {
+	width: 50px;
 	text-align: center;
 }
 td.last, th.last {
-	width: 180px;
+	width: 174px;
 	text-align: center;
 }
 td.seq {
