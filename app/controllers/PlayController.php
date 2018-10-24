@@ -15,7 +15,7 @@ class PlayController extends \Phalcon\Mvc\Controller
 		// And some local JavaScript resources
         $this->assets->addJs('//code.jquery.com/jquery-3.3.1.min.js', false);
         $this->assets->addJs('js/bootstrap.min.js');
-		$this->assets->addJs('js/play.js');
+		$this->assets->addJs('js/play.js?time='.$time);
 		$this->view->nav = 'play';
 		if(false === $this->auth->isUserSignedIn())
 			$this->view->pick('play/warning');
