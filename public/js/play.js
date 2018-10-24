@@ -2836,6 +2836,7 @@ function _pacMoveDealEndGame() {
 		command = Array();
 		level++;
 		status = 0;
+		ghost_score = 200;
 		addLife();
 		$('main .level').text(numberWithCommas(level));
 		ghost = Array();
