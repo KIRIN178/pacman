@@ -60,6 +60,10 @@ function initBtn() {
 		$('main .score-panel').show();
 		initKeyboard();
 	});
+	$(document).on('click','.btn-quit', function() {
+		life = 0;
+		pacmanDead();
+	});
 }
 function initKeyboard() {
 	$(document).on('keydown', function(e) {
@@ -2165,37 +2169,7 @@ function pacmanDead() {
 	life--;
 	if(life < 0)
 	{
-		ghost = Array();
-		$('main .level-panel').remove();
-		$('main .game-panel').remove();
-		$('main .score-panel').remove();
-		$('.loading').show();
-		$.ajax({
-		  type: "PUT",
-		  dataType: 'json',
-		  url: "/user/score",
-		  data: {level:level,score:score},
-		  success: function(msg){
-			  $('.loading').hide();
-			  if(msg.status == 'ok')
-			  {
-				  
-				  $('main .last-level').text(numberWithCommas(level));
-				  $('main .last-score').text(numberWithCommas(score));
-				  $('main .highest-level').text(numberWithCommas(msg.level));
-				  $('main .total-score').text(numberWithCommas(msg.score));
-				  $('main .team-score').text(numberWithCommas(msg.teamScore));
-				  $('main .result-panel').show();
-			  }
-			  else
-			  {
-				  alert('error');
-			  }
-		  },
-		  error: function(XMLHttpRequest, textStatus, errorThrown) {
-			console.log(errorThrown);
-		  }
-		});
+		saveRecord();
 	}
 	else
 	{
@@ -2305,9 +2279,39 @@ function restartMap() {
 	ghost = Array();
 	_ghostGenerate();
 }
-function _calc_position(way,position)
+function saveRecord()
 {
-	
+	ghost = Array();
+	$('main .level-panel').remove();
+	$('main .game-panel').remove();
+	$('main .score-panel').remove();
+	$('.loading').show();
+	$.ajax({
+	  type: "PUT",
+	  dataType: 'json',
+	  url: "/user/score",
+	  data: {level:level,score:score},
+	  success: function(msg){
+		  $('.loading').hide();
+		  if(msg.status == 'ok')
+		  {
+
+			  $('main .last-level').text(numberWithCommas(level));
+			  $('main .last-score').text(numberWithCommas(score));
+			  $('main .highest-level').text(numberWithCommas(msg.level));
+			  $('main .total-score').text(numberWithCommas(msg.score));
+			  $('main .team-score').text(numberWithCommas(msg.teamScore));
+			  $('main .result-panel').show();
+		  }
+		  else
+		  {
+			  alert('error');
+		  }
+	  },
+	  error: function(XMLHttpRequest, textStatus, errorThrown) {
+		console.log(errorThrown);
+	  }
+	});
 }
 function _dealMove(way) {
 	if(command.length == 0)
