@@ -59,7 +59,11 @@ function initBtn() {
 		$('main>h2').show();
 		$('main .score-panel').show();
 		initKeyboard();
+		window.onbeforeunload = function() {
+			return true;
+		};
 	});
+	// Enable navigation prompt
 	$(document).on('click','.btn-quit', function() {
 		life = 0;
 		pacmanDead();
@@ -2312,6 +2316,8 @@ function saveRecord()
 		console.log(errorThrown);
 	  }
 	});
+	// Remove navigation prompt
+	window.onbeforeunload = null;
 }
 function _dealMove(way) {
 	if(command.length == 0)
