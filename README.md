@@ -37,6 +37,7 @@ first formats or as one of the later Pacman clones.
 プレイヤーが新しいレベルを通過するたびに、彼とチームメンバーは余分な命を得て、
 プレイヤーはポイントを獲得して彼のランクアップを助けることを意味します。 （この
 ロジックは、リーダーボードに反映されたサーバ側で思考と作成する必要があります）
+
 1. Pacman, our hero, munches his way around the room, eating all of the Pac-dots.
 2. In each corner of the room there is a "Power Pellet", which when Pacman eats one, the
 Ghosts turn blue or yellow. Pacman can get extra points by eating the Ghosts. The first
