@@ -84,7 +84,7 @@ The basic Ghosts's attemption is that when they are given birth from graves or m
 
 Under the sitiuation of Pacman during having "Power Pellet", Ghosts will become blue and weak and try to escape from Pacman. When they are given birth from graves or meet a intersection and in the weak blue status, they will try to look for Pacman from their position with horizon line and verticle line. If they can Pacman in one of the four ways, they will decide not go on that way and decide a random way excepting the way which Pacman is on.
 
-#SNSシェア SNS Share
+# SNSシェア SNS Share
 プレーヤーはランクページにあるフェースブックボタンでシェアすることができます。
 
 Players can share this game on their facebook with FB share button on Ranking page. 
